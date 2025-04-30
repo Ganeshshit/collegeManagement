@@ -28,17 +28,11 @@ function AdminDashboard({ user, onLogout }) {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      // In a real app, you would use the API service
-      // const data = await getUsers();
-      
-      // Mock data for demonstration
-      const data = [
-        { id: 1, username: 'student', email: 'student@example.com', firstName: 'Student', lastName: 'User', role: 'student' },
-        { id: 2, username: 'faculty', email: 'faculty@example.com', firstName: 'Faculty', lastName: 'Member', role: 'faculty' },
-        { id: 3, username: 'trainer', email: 'trainer@example.com', firstName: 'Trainer', lastName: 'Expert', role: 'trainer' },
-        { id: 4, username: 'admin', email: 'admin@example.com', firstName: 'Admin', lastName: 'User', role: 'admin' },
-      ];
-      
+      // Use the real API service
+      console.log('Fetching users from API');
+      const data = await getUsers();
+      console.log('Fetched users:', data);
+
       setUsers(data);
       setError('');
     } catch (err) {
@@ -87,11 +81,12 @@ function AdminDashboard({ user, onLogout }) {
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        // In a real app, you would use the API service
-        // await deleteUser(userId);
-        
-        // Mock deletion
-        setUsers(users.filter(user => user.id !== userId));
+        // Use the real API service
+        console.log('Deleting user with ID:', userId);
+        await deleteUser(userId);
+
+        // Update the UI after successful deletion
+        setUsers(users.filter(user => user._id !== userId));
         setSuccess('User deleted successfully');
         setTimeout(() => setSuccess(''), 3000);
       } catch (err) {
@@ -103,43 +98,41 @@ function AdminDashboard({ user, onLogout }) {
 
   const handleSubmitUser = async (e) => {
     e.preventDefault();
-    
+
     // Validate form
     if (!formData.username || !formData.email || !formData.firstName || !formData.lastName || !formData.role) {
       setError('All fields are required');
       return;
     }
-    
+
     if (!editingUser && !formData.password) {
       setError('Password is required for new users');
       return;
     }
-    
+
     try {
       setLoading(true);
-      
+
       if (editingUser) {
-        // In a real app, you would use the API service
-        // await updateUser(editingUser.id, formData);
-        
-        // Mock update
-        setUsers(users.map(user => 
-          user.id === editingUser.id ? { ...user, ...formData } : user
+        // Use the real API service for updating
+        console.log('Updating user with ID:', editingUser._id, 'and data:', formData);
+        const updatedUser = await updateUser(editingUser._id, formData);
+
+        // Update the UI with the response from the API
+        setUsers(users.map(user =>
+          user._id === editingUser._id ? updatedUser : user
         ));
         setSuccess('User updated successfully');
       } else {
-        // In a real app, you would use the API service
-        // const response = await createUser(formData);
-        
-        // Mock creation
-        const newUser = {
-          id: users.length + 1,
-          ...formData
-        };
+        // Use the real API service for creating
+        console.log('Creating new user with data:', formData);
+        const newUser = await createUser(formData);
+
+        // Add the new user to the UI
         setUsers([...users, newUser]);
         setSuccess('User created successfully');
       }
-      
+
       setShowAddUserModal(false);
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
@@ -157,25 +150,25 @@ function AdminDashboard({ user, onLogout }) {
       <div className="dashboard-content">
         <nav className="dashboard-nav">
           <ul className="dashboard-nav-tabs">
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
               onClick={() => setActiveTab('overview')}
             >
               Overview
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'users' ? 'active' : ''}`}
               onClick={() => setActiveTab('users')}
             >
               User Management
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'courses' ? 'active' : ''}`}
               onClick={() => setActiveTab('courses')}
             >
               Course Management
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
               onClick={() => setActiveTab('profile')}
             >
@@ -194,7 +187,7 @@ function AdminDashboard({ user, onLogout }) {
             {error}
           </div>
         )}
-        
+
         {success && (
           <div className="alert alert-success" style={{ backgroundColor: '#d4edda', color: '#155724', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
             {success}
@@ -266,19 +259,19 @@ function AdminDashboard({ user, onLogout }) {
                 </thead>
                 <tbody>
                   {users.slice(0, 5).map(user => (
-                    <tr key={user.id}>
+                    <tr key={user._id}>
                       <td>{user.username}</td>
                       <td>{user.firstName} {user.lastName}</td>
                       <td>{user.email}</td>
                       <td>
-                        <span 
-                          style={{ 
-                            padding: '4px 8px', 
-                            borderRadius: '4px', 
-                            backgroundColor: 
-                              user.role === 'admin' ? '#f44336' : 
-                              user.role === 'faculty' ? '#2196f3' : 
-                              user.role === 'trainer' ? '#ff9800' : 
+                        <span
+                          style={{
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            backgroundColor:
+                              user.role === 'admin' ? '#f44336' :
+                              user.role === 'faculty' ? '#2196f3' :
+                              user.role === 'trainer' ? '#ff9800' :
                               '#4caf50',
                             color: 'white',
                             fontSize: '12px',
@@ -290,7 +283,7 @@ function AdminDashboard({ user, onLogout }) {
                       </td>
                       <td>
                         <button className="table-action-button" onClick={() => handleEditUser(user)}>Edit</button>
-                        <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                        <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user._id)}>Delete</button>
                       </td>
                     </tr>
                   ))}
@@ -305,10 +298,10 @@ function AdminDashboard({ user, onLogout }) {
             <div className="table-header">
               <h2 className="table-title">User Management</h2>
               <div className="table-actions">
-                <input 
-                  type="text" 
-                  placeholder="Search users..." 
-                  className="form-control" 
+                <input
+                  type="text"
+                  placeholder="Search users..."
+                  className="form-control"
                   style={{ width: '250px', marginRight: '16px' }}
                 />
                 <button className="btn btn-accent" onClick={handleAddUser}>Add New User</button>
@@ -326,19 +319,19 @@ function AdminDashboard({ user, onLogout }) {
               </thead>
               <tbody>
                 {users.map(user => (
-                  <tr key={user.id}>
+                  <tr key={user._id}>
                     <td>{user.username}</td>
                     <td>{user.firstName} {user.lastName}</td>
                     <td>{user.email}</td>
                     <td>
-                      <span 
-                        style={{ 
-                          padding: '4px 8px', 
-                          borderRadius: '4px', 
-                          backgroundColor: 
-                            user.role === 'admin' ? '#f44336' : 
-                            user.role === 'faculty' ? '#2196f3' : 
-                            user.role === 'trainer' ? '#ff9800' : 
+                      <span
+                        style={{
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          backgroundColor:
+                            user.role === 'admin' ? '#f44336' :
+                            user.role === 'faculty' ? '#2196f3' :
+                            user.role === 'trainer' ? '#ff9800' :
                             '#4caf50',
                           color: 'white',
                           fontSize: '12px',
@@ -350,7 +343,7 @@ function AdminDashboard({ user, onLogout }) {
                     </td>
                     <td>
                       <button className="table-action-button" onClick={() => handleEditUser(user)}>Edit</button>
-                      <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                      <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user._id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -423,60 +416,60 @@ function AdminDashboard({ user, onLogout }) {
             <div className="form-row">
               <div className="form-group">
                 <label>First Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.firstName} 
-                  readOnly 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.firstName}
+                  readOnly
                 />
               </div>
               <div className="form-group">
                 <label>Last Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.lastName} 
-                  readOnly 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.lastName}
+                  readOnly
                 />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label>Email</label>
-                <input 
-                  type="email" 
-                  className="form-control" 
-                  value={user.email} 
-                  readOnly 
+                <input
+                  type="email"
+                  className="form-control"
+                  value={user.email}
+                  readOnly
                 />
               </div>
               <div className="form-group">
                 <label>Username</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.username} 
-                  readOnly 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.username}
+                  readOnly
                 />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label>Role</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.role} 
-                  readOnly 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.role}
+                  readOnly
                 />
               </div>
               <div className="form-group">
                 <label>Access Level</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.adminInfo?.accessLevel || 'Full'} 
-                  readOnly 
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.adminInfo?.accessLevel || 'Full'}
+                  readOnly
                 />
               </div>
             </div>
