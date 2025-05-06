@@ -6,10 +6,33 @@
   --accent-color: #ff8c42;
   --accent-light: #ffa66b;
   --accent-dark: #e67223;
+  --action-color: #6c5ce7;
+  --action-light: #8a7ef5;
+  --action-dark: #5348c0;
+  --success-color: #4CAF50;
+  --danger-color: #f44336;
+  --warning-color: #ff9800;
+  --info-color: #2196f3;
   --text-light: #ffffff;
   --text-dark: #333333;
+  --text-muted: #6c757d;
   --background-light: #f5f7f8;
   --background-dark: #e1e5e8;
+  --border-color: #e0e0e0;
+  --input-bg: #f9f9f9;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --transition-fast: 0.2s;
+  --transition-normal: 0.3s;
 }
 
 .app-container {
@@ -209,32 +232,314 @@
   font-size: 14px;
 }
 
+/* Dashboard Styling */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.dashboard-nav {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dashboard-nav-tabs {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-nav-tabs li {
+  padding: 10px 15px;
+  cursor: pointer;
+  color: #666;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.dashboard-nav-tabs li.active {
+  color: #3498db;
+  border-bottom-color: #3498db;
+}
+
+.dashboard-nav-tabs li:hover {
+  color: #3498db;
+}
+
+.dashboard-section {
+  padding: 20px 0;
+}
+
+/* Courses Grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.course-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+}
+
+.course-card h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Assignments List */
+.assignments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.assignment-card {
+  background-color: #f0f4f8;
+  border-radius: 8px;
+  padding: 15px;
+  border-left: 4px solid #3498db;
+}
+
+/* Attendance Grid */
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.attendance-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-details {
+  margin-top: 10px;
+}
+
+.attendance-percentage {
+  margin-top: 10px;
+  position: relative;
+  height: 25px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.attendance-percentage span {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.attendance-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+/* Attendance Section Styles */
+.attendance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.attendance-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.attendance-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.attendance-card.low-attendance {
+  border-left: 4px solid #FF5722;
+  background-color: #fff3e0;
+}
+
+.attendance-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.attendance-stats {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+}
+
+.attendance-percentage {
+  height: 25px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.attendance-percentage .attendance-bar {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+
+.attendance-percentage span {
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.attendance-warning {
+  color: #FF5722;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+/* Attendance Modal Styles */
+.attendance-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.attendance-modal-content {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-modal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.attendance-summary {
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.attendance-record-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-record-list th,
+.attendance-record-list td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  text-align: left;
+}
+
+.attendance-record-list tr.present {
+  background-color: #e8f5e9;
+}
+
+.attendance-record-list tr.absent {
+  background-color: #ffebee;
+}
+
+.close-modal-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-modal-btn:hover {
+  background-color: #2980b9;
+}
+
 /* Table Styles */
 .table-container {
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: var(--spacing-lg);
 }
 
 .table-header {
-  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table-title {
   margin: 0;
-  color: var(--primary-color);
   font-size: 18px;
+  font-weight: 500;
+  color: var(--primary-dark);
 }
 
 .table-actions {
   display: flex;
-  gap: 8px;
+  align-items: center;
 }
 
 .table {
@@ -244,51 +549,90 @@
 
 .table th,
 .table td {
-  padding: 16px 24px;
+  padding: var(--spacing-md) var(--spacing-lg);
   text-align: left;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table th {
-  background-color: var(--primary-color);
-  color: white;
   font-weight: 500;
+  color: var(--text-muted);
+  background-color: var(--input-bg);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.table tr {
-  border-bottom: 1px solid #eee;
+.table tr:hover {
+  background-color: rgba(53, 101, 117, 0.03);
 }
 
-.table tr:last-child {
+.table tr:last-child td {
   border-bottom: none;
 }
 
-.table tr:nth-child(even) {
-  background-color: var(--background-light);
-}
-
 .table-action-button {
-  background: none;
+  background-color: transparent;
   border: none;
-  cursor: pointer;
   color: var(--primary-color);
-  transition: color 0.3s;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-right: 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-size: 14px;
 }
 
 .table-action-button:hover {
-  color: var(--accent-color);
+  background-color: rgba(53, 101, 117, 0.1);
+  transform: translateY(-1px);
 }
 
-.delete-button {
-  color: #d32f2f;
+.table-action-button.delete-button {
+  color: var(--danger-color);
 }
 
-.delete-button:hover {
-  color: #b71c1c;
+.table-action-button.delete-button:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Role badges */
+.role-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.role-badge.admin {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.role-badge.faculty {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: var(--info-color);
+}
+
+.role-badge.trainer {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.role-badge.student {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
 }
 
 /* Form Styles */
 .form-container {
   background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 24px;
@@ -327,6 +671,151 @@
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.3s;
+  overflow: hidden;
+}
+
+/* Profile Form */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.btn-save-profile,
+.btn-edit-profile {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-save-profile:hover,
+.btn-edit-profile:hover {
+  background-color: #2980b9;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+/* Attendance Summary Overview */
+.attendance-summary-overview {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-summary-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.summary-card {
+  flex: 1;
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+}
+
+.summary-card h3 {
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 1rem;
+}
+
+.summary-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #3498db;
+}
+
+/* Global scrollbar removal */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remove scrollbars from all input elements */
+input, textarea, select {
+  overflow: hidden !important;
+}
+
+/* Remove scrollbars from modal content */
+.modal, .modal-body, .modal-content, .modal-backdrop, .modal-header, .modal-footer {
+  overflow: hidden !important;
+}
+
+/* Remove scrollbars from form groups */
+.form-group {
+  overflow: hidden !important;
+}
+
+/* Ensure modal content is properly visible */
+.modal-body {
+  max-height: 70vh;
+  padding: 16px;
 }
 
 .form-control:focus {
@@ -401,7 +890,10 @@
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  animation: modalFadeIn 0.3s ease-out;
 }
 
 .modal-header {
@@ -477,5 +969,27 @@
   
   .btn {
     width: 100%;
+  }
+}
+
+/* Modal Animation Styles */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal backdrop animation */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

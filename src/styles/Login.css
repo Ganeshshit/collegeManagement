@@ -1,152 +1,158 @@
+/* Login Page Styles */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #356575;
-  background-image: linear-gradient(135deg, #356575 0%, #204a5a 100%);
-  position: relative;
-  overflow: hidden;
+  background-color: #2d6a7a;
+  font-family: Arial, sans-serif;
+  background-image: linear-gradient(to bottom right, #2d6a7a, #1c4b57);
 }
 
-.login-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background-image: url('../assets/medini-logo-teal-text.svg');
-  background-repeat: no-repeat;
-  background-position: center right;
-  background-size: contain;
-  opacity: 0.1;
-  z-index: 0;
-}
-
-.login-card {
+.login-content {
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 32px;
+  padding: 30px;
   width: 100%;
   max-width: 400px;
-  position: relative;
-  z-index: 1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .login-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-logo img {
+  max-width: 180px;
+  height: auto;
+}
+
+.login-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 32px;
 }
 
-.medini-logo-image {
-  height: 100px;
-  width: auto;
-  margin-bottom: 16px;
-  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+.input-group {
+  margin-bottom: 15px;
 }
 
-.login-title {
-  color: #008080;
-  text-align: center;
-  margin: 0;
-  font-size: 24px;
+.improved-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  background-color: #f5f7fb;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
-.form-group {
+.improved-input:focus {
+  border-color: #2d6a7a;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(45, 106, 122, 0.2);
+}
+
+.forgot-password {
+  text-align: right;
   margin-bottom: 20px;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #356575;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(53, 101, 117, 0.2);
+.forgot-password a {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .login-button {
-  background-color: #ff8c42;
+  background-color: #ff8a47;
   color: white;
   border: none;
-  border-radius: 4px;
   padding: 12px;
-  width: 100%;
-  font-size: 16px;
-  font-weight: 500;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+  width: 100%;
 }
 
 .login-button:hover {
-  background-color: #e67223;
+  background-color: #e67e3e;
 }
 
 .login-button:disabled {
-  background-color: #ffa66b;
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
+.create-account {
+  margin-bottom: 30px;
+}
+
+.create-account a {
+  color: #356575;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.create-account a:hover {
+  text-decoration: underline;
+}
+
 .error-message {
-  color: #d32f2f;
-  margin-bottom: 16px;
+  color: #e74c3c;
+  margin-bottom: 15px;
   font-size: 14px;
 }
 
+/* Divider */
+.divider {
+  height: 1px;
+  background-color: #e1e8ed;
+  margin: 20px 0;
+  width: 100%;
+}
+
+/* Footer */
 .login-footer {
-  margin-top: 32px;
   text-align: center;
-  color: #666;
-  font-size: 14px;
+}
+
+.copyright {
+  color: #7f8c8d;
+  font-size: 13px;
+  margin-bottom: 15px;
 }
 
 .test-credentials {
-  margin-top: 16px;
-  text-align: left;
-  background-color: #f5f7f8;
-  padding: 12px;
-  border-radius: 4px;
+  background-color: #f8f9fa;
   font-size: 12px;
-  border-left: 3px solid #20b2aa;
+  color: #666;
+  border-left: 3px solid #2d6a7a;
+  padding: 10px 10px 10px 15px;
+  margin-top: 15px;
+  border-radius: 4px;
+}
+
+.test-credentials h4 {
+  color: #2d6a7a;
+  margin-bottom: 5px;
+  font-size: 13px;
 }
 
 .test-credentials p {
-  margin: 4px 0;
+  margin: 3px 0;
 }
 
-@media (max-width: 768px) {
-  .login-container::before {
-    width: 100%;
-    background-position: center;
-    opacity: 0.05;
-  }
+.credential {
+  color: #2d6a7a;
+  font-weight: 500;
 }
 
-@media (max-width: 480px) {
-  .login-card {
-    padding: 24px;
-    margin: 16px;
-  }
-  
-  .medini-logo-image {
-    height: 80px;
-  }
+.credentials-info span {
+  color: #20b2aa;
+  font-family: monospace;
 }

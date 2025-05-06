@@ -62,11 +62,6 @@ function TrainerDashboard({ user, onLogout }) {
                 Reports
               </Link>
             </li>
-            <li className="dashboard-nav-tab">
-              <Link to="/admin" style={{ color: 'inherit', textDecoration: 'none' }}>
-                Admin
-              </Link>
-            </li>
           </ul>
         </nav>
 

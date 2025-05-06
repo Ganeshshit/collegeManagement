@@ -1,7 +1,79 @@
 import axios from 'axios';
 
-// Set USE_MOCK_DATA to false to use real API
-const USE_MOCK_DATA = false;
+// Set USE_MOCK_DATA to true to use mock data instead of real API
+const USE_MOCK_DATA = true;
+
+// Mock data for testing without backend - using direct credential pairs for simplicity
+const mockCredentials = [
+  { username: 'student', password: 'student123', userData: { id: 1, username: 'student', name: 'Student User', role: 'student', email: 'student@example.com' } },
+  { username: 'faculty', password: 'faculty123', userData: { id: 2, username: 'faculty', name: 'Faculty User', role: 'faculty', email: 'faculty@example.com' } },
+  { username: 'trainer', password: 'trainer123', userData: { id: 3, username: 'trainer', name: 'Trainer User', role: 'trainer', email: 'trainer@example.com' } },
+  { username: 'admin', password: 'admin123', userData: { id: 4, username: 'admin', name: 'Admin User', role: 'admin', email: 'admin@example.com' } },
+  { username: 'superadmin', password: 'super123', userData: { id: 5, username: 'superadmin', name: 'Super Admin User', role: 'superadmin', email: 'superadmin@example.com' } }
+];
+
+const mockReports = [
+  { id: 1, title: 'Attendance Report', description: 'Monthly attendance report', createdAt: '2025-04-01' },
+  { id: 2, title: 'Performance Report', description: 'Student performance metrics', createdAt: '2025-04-15' }
+];
+
+// Enhanced Mock Attendance Data
+const mockAttendance = [
+  { 
+    id: 1, 
+    code: 'CS101', 
+    name: 'Introduction to Computer Science', 
+    totalClasses: 45,     // Increased total classes
+    attendedClasses: 38,  // Increased attended classes
+    percentage: 84.44,    // Recalculated percentage
+    attendanceStatus: 'Good',
+    details: [
+      { date: '2025-04-01', status: 'Present', topic: 'Basic Programming Concepts' },
+      { date: '2025-04-02', status: 'Present', topic: 'Variables and Data Types' },
+      { date: '2025-04-03', status: 'Absent', topic: 'Control Structures', reason: 'Medical Leave' },
+      { date: '2025-04-04', status: 'Present', topic: 'Functions' },
+      { date: '2025-04-05', status: 'Present', topic: 'Object-Oriented Programming' }
+    ],
+    riskyDates: ['2025-04-03'],
+    consecutiveAbsences: 1
+  },
+  { 
+    id: 2, 
+    code: 'CS201', 
+    name: 'Data Structures', 
+    totalClasses: 40, 
+    attendedClasses: 32, 
+    percentage: 80.00,
+    attendanceStatus: 'Warning',
+    details: [
+      { date: '2025-04-01', status: 'Present', topic: 'Arrays' },
+      { date: '2025-04-02', status: 'Absent', topic: 'Linked Lists', reason: 'Personal Work' },
+      { date: '2025-04-03', status: 'Present', topic: 'Stacks and Queues' },
+      { date: '2025-04-04', status: 'Absent', topic: 'Trees', reason: 'Family Event' },
+      { date: '2025-04-05', status: 'Present', topic: 'Graphs' }
+    ],
+    riskyDates: ['2025-04-02', '2025-04-04'],
+    consecutiveAbsences: 2
+  },
+  { 
+    id: 3, 
+    code: 'CS301', 
+    name: 'Database Systems', 
+    totalClasses: 42, 
+    attendedClasses: 40, 
+    percentage: 95.24,
+    attendanceStatus: 'Excellent',
+    details: [
+      { date: '2025-04-01', status: 'Present', topic: 'Database Design' },
+      { date: '2025-04-02', status: 'Present', topic: 'Normalization' },
+      { date: '2025-04-03', status: 'Present', topic: 'SQL Queries' },
+      { date: '2025-04-04', status: 'Present', topic: 'Indexing' },
+      { date: '2025-04-05', status: 'Present', topic: 'Transaction Management' }
+    ],
+    riskyDates: [],
+    consecutiveAbsences: 0
+  }
+];
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -44,6 +116,58 @@ api.interceptors.response.use(
 export const login = async (credentials) => {
   try {
     console.log('Attempting login with:', credentials);
+    
+    if (USE_MOCK_DATA) {
+      // Mock login logic
+      const { username, password } = credentials;
+      
+      console.log('Checking credentials against mock users...');
+      
+      // Hardcoded credentials for testing
+      const validCredentials = [
+        { username: 'student', password: 'student123', role: 'student', name: 'Student User' },
+        { username: 'faculty', password: 'faculty123', role: 'faculty', name: 'Faculty User' },
+        { username: 'trainer', password: 'trainer123', role: 'trainer', name: 'Trainer User' },
+        { username: 'admin', password: 'admin123', role: 'admin', name: 'Admin User' },
+        { username: 'superadmin', password: 'super123', role: 'superadmin', name: 'Super Admin User' }
+      ];
+      
+      // Find matching credentials
+      const match = validCredentials.find(
+        cred => cred.username === username && cred.password === password
+      );
+      
+      console.log('Found user match:', match ? 'Yes' : 'No');
+      
+      if (match) {
+        // Create user data
+        const userData = {
+          id: Math.floor(Math.random() * 1000),
+          username: match.username,
+          name: match.name,
+          role: match.role,
+          email: `${match.username}@example.com`
+        };
+        
+        // Create response with token and user data
+        const mockResponse = {
+          token: 'mock-jwt-token-' + username,
+          user: userData
+        };
+        
+        // Store in localStorage
+        localStorage.setItem('token', mockResponse.token);
+        localStorage.setItem('user', JSON.stringify(mockResponse.user));
+        
+        console.log('Login successful:', mockResponse);
+        return mockResponse;
+      } else {
+        console.error('Login failed: Invalid credentials');
+        throw new Error('Invalid credentials');
+      }
+    }
+    
+    // Real API call if not using mock data
     const response = await api.post('/auth/login', credentials);
     console.log('Login response:', response.data);
     if (response.data.token) {
@@ -65,10 +189,56 @@ export const logout = () => {
 
 export const getCurrentUser = async () => {
   try {
+    console.log('Getting current user...');
+    
     // First try to get from localStorage to avoid unnecessary API calls
     const storedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    
+    console.log('Stored user:', storedUser ? 'Found' : 'Not found');
+    console.log('Token:', token ? 'Found' : 'Not found');
+    
     if (storedUser) {
-      return JSON.parse(storedUser);
+      const userData = JSON.parse(storedUser);
+      console.log('Retrieved user from localStorage:', userData);
+      return userData;
+    }
+    
+    if (USE_MOCK_DATA) {
+      // If we have a token but no user data, try to find the user from token
+      if (token) {
+        const username = token.replace('mock-jwt-token-', '');
+        console.log('Extracting username from token:', username);
+        
+        // Hardcoded credentials for testing
+        const validCredentials = [
+          { username: 'student', password: 'student123', role: 'student', name: 'Student User' },
+          { username: 'faculty', password: 'faculty123', role: 'faculty', name: 'Faculty User' },
+          { username: 'trainer', password: 'trainer123', role: 'trainer', name: 'Trainer User' },
+          { username: 'admin', password: 'admin123', role: 'admin', name: 'Admin User' },
+          { username: 'superadmin', password: 'super123', role: 'superadmin', name: 'Super Admin User' }
+        ];
+        
+        // Find matching user
+        const match = validCredentials.find(cred => cred.username === username);
+        
+        if (match) {
+          // Create user data
+          const userData = {
+            id: Math.floor(Math.random() * 1000),
+            username: match.username,
+            name: match.name,
+            role: match.role,
+            email: `${match.username}@example.com`
+          };
+          
+          console.log('Found user from token:', userData);
+          localStorage.setItem('user', JSON.stringify(userData));
+          return userData;
+        }
+      }
+      console.log('No user found in mock data');
+      return null;
     }
     
     // If not in localStorage, get from API
@@ -86,6 +256,14 @@ export const getCurrentUser = async () => {
 export const getUsers = async () => {
   try {
     console.log('Fetching users with token:', localStorage.getItem('token'));
+    
+    if (USE_MOCK_DATA) {
+      // Return mock users as an array
+      const usersArray = mockCredentials.map(cred => cred.userData);
+      console.log('Mock users:', usersArray);
+      return usersArray;
+    }
+    
     const response = await api.get('/admin/users');
     console.log('Users response:', response.data);
     return response.data;
@@ -169,6 +347,10 @@ export const deleteUser = async (id) => {
 // Report API functions
 export const getReports = async () => {
   try {
+    if (USE_MOCK_DATA) {
+      return mockReports;
+    }
+    
     const response = await api.get('/reports');
     return response.data;
   } catch (error) {
@@ -256,6 +438,46 @@ export const updateStudentProfile = async (id, profileData) => {
     return response.data;
   } catch (error) {
     console.error('Update student profile error:', error);
+    throw error;
+  }
+};
+
+// Get student attendance
+export const getStudentAttendance = async (studentId) => {
+  try {
+    if (USE_MOCK_DATA) {
+      // Return mock attendance data
+      return mockAttendance;
+    }
+    
+    const response = await api.get(`/students/${studentId}/attendance`);
+    return response.data;
+  } catch (error) {
+    console.error('Get student attendance error:', error);
+    throw error;
+  }
+};
+
+// Get detailed student attendance
+export const getDetailedStudentAttendance = async (studentId) => {
+  if (USE_MOCK_DATA) {
+    // Simulate some processing or additional data retrieval
+    return {
+      overall: {
+        totalCourses: mockAttendance.length,
+        averageAttendance: mockAttendance.reduce((sum, course) => sum + course.percentage, 0) / mockAttendance.length,
+        coursesWithWarning: mockAttendance.filter(course => course.attendanceStatus === 'Warning').length
+      },
+      courses: mockAttendance
+    };
+  }
+
+  // Actual API call in a real-world scenario
+  try {
+    const response = await api.get(`/students/${studentId}/detailed-attendance`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching detailed attendance:', error);
     throw error;
   }
 };
