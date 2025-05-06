@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import { getStudentProfile, updateStudentProfile } from '../services/api';
+import AttendanceSystem from './AttendanceSystem';
 import '../App.css';
 
 function StudentDashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [courses, setCourses] = useState([]);
   const [assignments, setAssignments] = useState([]);
+  const [selectedCourseForAttendance, setSelectedCourseForAttendance] = useState(null);
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
     firstName: user?.firstName || '',
@@ -117,15 +119,16 @@ function StudentDashboard({ user, onLogout }) {
               Assignments
             </li>
             <li 
+              className={`dashboard-nav-tab ${activeTab === 'attendance' ? 'active' : ''}`}
+              onClick={() => setActiveTab('attendance')}
+            >
+              Attendance
+            </li>
+            <li 
               className={`dashboard-nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
               onClick={() => setActiveTab('profile')}
             >
               Profile
-            </li>
-            <li className="dashboard-nav-tab">
-              <Link to="/reports" style={{ color: 'inherit', textDecoration: 'none' }}>
-                Reports
-              </Link>
             </li>
           </ul>
         </nav>
@@ -220,6 +223,55 @@ function StudentDashboard({ user, onLogout }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {activeTab === 'attendance' && (
+          <div className="attendance-container">
+            <div className="section-header">
+              <h2>My Attendance</h2>
+              <p>View your attendance records for all enrolled courses.</p>
+            </div>
+            
+            <div className="course-selector">
+              <label htmlFor="courseSelect">Select Course: </label>
+              <select 
+                id="courseSelect" 
+                value={selectedCourseForAttendance ? selectedCourseForAttendance.id : ''}
+                onChange={(e) => {
+                  const selected = courses.find(c => c.id === parseInt(e.target.value));
+                  setSelectedCourseForAttendance(selected);
+                }}
+              >
+                <option value="">-- Select a Course --</option>
+                {courses.map(course => (
+                  <option key={course.id} value={course.id}>
+                    {course.code}: {course.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {selectedCourseForAttendance ? (
+              <AttendanceSystem 
+                userRole="student" 
+                courseId={selectedCourseForAttendance.id} 
+                students={[{
+                  id: user.id,
+                  rollNumber: user.studentInfo?.rollNumber || 'S001',
+                  name: `${user.firstName} ${user.lastName}`,
+                  course: selectedCourseForAttendance.code
+                }]}
+              />
+            ) : (
+              <div className="select-course-message">
+                <p>Please select a course to view your attendance records.</p>
+              </div>
+            )}
+            
+            <div className="attendance-note">
+              <p><strong>Note:</strong> If you notice any discrepancies in your attendance records, please contact your course instructor or the academic office.</p>
+            </div>
           </div>
         )}
 

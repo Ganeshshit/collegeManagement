@@ -16,15 +16,24 @@ function App() {
 
   useEffect(() => {
     const verifyUser = async () => {
+      console.log('Verifying user...');
       const token = localStorage.getItem('token');
       if (!token) {
+        console.log('No token found, not logged in');
         setLoading(false);
         return;
       }
 
       try {
+        console.log('Token found, getting user data...');
         const userData = await getCurrentUser();
-        setUser(userData);
+        console.log('User data retrieved:', userData);
+        if (userData) {
+          setUser(userData);
+        } else {
+          console.log('No user data found, clearing token');
+          localStorage.removeItem('token');
+        }
       } catch (error) {
         console.error('Error verifying user:', error);
         localStorage.removeItem('token');
@@ -38,7 +47,13 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
+  };
+  
+  const handleLogin = (userData) => {
+    console.log('Setting user data in App.js:', userData);
+    setUser(userData);
   };
 
   if (loading) {
@@ -58,7 +73,7 @@ function App() {
         <Routes>
           <Route 
             path="/login" 
-            element={user ? <Navigate to="/" /> : <Login onLogin={setUser} />} 
+            element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} 
           />
           <Route 
             path="/reports" 
@@ -66,23 +81,33 @@ function App() {
               user ? <Reports user={user} onLogout={handleLogout} /> : <Navigate to="/login" />
             } 
           />
+          {/* Dashboard routes */}
+          <Route path="/student" element={user && user.role === 'student' ? <StudentDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/faculty" element={user && user.role === 'faculty' ? <FacultyDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/trainer" element={user && user.role === 'trainer' ? <TrainerDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/admin" element={user && user.role === 'admin' ? <AdminDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/superadmin" element={user && user.role === 'superadmin' ? <SuperAdminDashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          
+          {/* Root route with role-based redirection */}
           <Route 
             path="/" 
             element={
               user ? (
                 (() => {
+                  console.log('Redirecting based on role:', user.role);
                   switch (user.role) {
                     case 'student':
-                      return <StudentDashboard user={user} onLogout={handleLogout} />;
+                      return <Navigate to="/student" />;
                     case 'faculty':
-                      return <FacultyDashboard user={user} onLogout={handleLogout} />;
+                      return <Navigate to="/faculty" />;
                     case 'trainer':
-                      return <TrainerDashboard user={user} onLogout={handleLogout} />;
+                      return <Navigate to="/trainer" />;
                     case 'admin':
-                      return <AdminDashboard user={user} onLogout={handleLogout} />;
+                      return <Navigate to="/admin" />;
                     case 'superadmin':
-                      return <SuperAdminDashboard user={user} onLogout={handleLogout} />;
+                      return <Navigate to="/superadmin" />;
                     default:
+                      console.log('Unknown role, redirecting to login');
                       return <Navigate to="/login" />;
                   }
                 })()

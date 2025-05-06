@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import AttendanceSystem from './AttendanceSystem';
 import '../App.css';
 
 function TrainerDashboard({ user, onLogout }) {
@@ -8,6 +9,7 @@ function TrainerDashboard({ user, onLogout }) {
   const [trainings, setTrainings] = useState([]);
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedTraining, setSelectedTraining] = useState(null);
 
   useEffect(() => {
     // Mock data - in a real app, you would fetch this from your API
@@ -52,6 +54,12 @@ function TrainerDashboard({ user, onLogout }) {
               Participants
             </li>
             <li 
+              className={`dashboard-nav-tab ${activeTab === 'attendance' ? 'active' : ''}`}
+              onClick={() => setActiveTab('attendance')}
+            >
+              Attendance
+            </li>
+            <li 
               className={`dashboard-nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
               onClick={() => setActiveTab('profile')}
             >
@@ -60,11 +68,6 @@ function TrainerDashboard({ user, onLogout }) {
             <li className="dashboard-nav-tab">
               <Link to="/reports" style={{ color: 'inherit', textDecoration: 'none' }}>
                 Reports
-              </Link>
-            </li>
-            <li className="dashboard-nav-tab">
-              <Link to="/admin" style={{ color: 'inherit', textDecoration: 'none' }}>
-                Admin
               </Link>
             </li>
           </ul>
@@ -250,6 +253,46 @@ function TrainerDashboard({ user, onLogout }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {activeTab === 'attendance' && (
+          <div className="attendance-container">
+            <div className="section-header">
+              <h2>Manage Attendance</h2>
+              <p>As a trainer, you can view and modify attendance records for all participants.</p>
+            </div>
+            
+            <div className="training-selector">
+              <label htmlFor="trainingSelect">Select Training: </label>
+              <select 
+                id="trainingSelect" 
+                value={selectedTraining ? selectedTraining.id : ''}
+                onChange={(e) => {
+                  const selected = trainings.find(t => t.id === parseInt(e.target.value));
+                  setSelectedTraining(selected);
+                }}
+              >
+                <option value="">-- Select a Training --</option>
+                {trainings.map(training => (
+                  <option key={training.id} value={training.id}>
+                    {training.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {selectedTraining ? (
+              <AttendanceSystem 
+                userRole="trainer" 
+                courseId={selectedTraining.id} 
+                students={participants.filter(p => p.training === selectedTraining.title)}
+              />
+            ) : (
+              <div className="select-training-message">
+                <p>Please select a training to view and manage attendance.</p>
+              </div>
+            )}
           </div>
         )}
 

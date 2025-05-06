@@ -1,0 +1,294 @@
+/* Attendance System Styles */
+.attendance-system {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.attendance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.attendance-header h3 {
+  color: #356575;
+  margin: 0;
+  font-size: 20px;
+}
+
+.date-selector {
+  display: flex;
+  align-items: center;
+}
+
+.date-selector label {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #555;
+}
+
+.date-selector input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.message {
+  padding: 12px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.message.success {
+  background-color: #e6f7ee;
+  color: #2e7d32;
+  border-left: 4px solid #2e7d32;
+}
+
+.message.error {
+  background-color: #fdecea;
+  color: #d32f2f;
+  border-left: 4px solid #d32f2f;
+}
+
+.attendance-table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.attendance-table th {
+  background-color: #f5f7f9;
+  color: #356575;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.attendance-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eaeaea;
+  vertical-align: middle;
+}
+
+.attendance-table tr:hover {
+  background-color: #f9fbfd;
+}
+
+.attendance-status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.attendance-status.present {
+  background-color: #e6f7ee;
+  color: #2e7d32;
+}
+
+.attendance-status.absent {
+  background-color: #fdecea;
+  color: #d32f2f;
+}
+
+/* Attendance percentage visualization */
+.attendance-percentage {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.percentage-value {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.percentage-value.good {
+  color: #2e7d32;
+}
+
+.percentage-value.average {
+  color: #f57c00;
+}
+
+.percentage-value.poor {
+  color: #d32f2f;
+}
+
+.percentage-bar-container {
+  height: 6px;
+  width: 100%;
+  background-color: #eaeaea;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.percentage-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.percentage-bar.good {
+  background-color: #2e7d32;
+}
+
+.percentage-bar.average {
+  background-color: #f57c00;
+}
+
+.percentage-bar.poor {
+  background-color: #d32f2f;
+}
+
+.roll-number {
+  font-family: monospace;
+  color: #555;
+}
+
+.student-name {
+  font-weight: 500;
+}
+
+/* Trainer action buttons */
+.attendance-actions {
+  min-width: 220px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.action-icon {
+  font-size: 16px;
+  margin-right: 6px;
+}
+
+.present-btn {
+  background-color: #f0f9f6;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.present-btn:hover:not(:disabled) {
+  background-color: #c8e6c9;
+}
+
+.present-btn.active {
+  background-color: #2e7d32;
+  color: white;
+  border-color: #2e7d32;
+}
+
+.absent-btn {
+  background-color: #fef5f5;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+.absent-btn:hover:not(:disabled) {
+  background-color: #ffcdd2;
+}
+
+.absent-btn.active {
+  background-color: #d32f2f;
+  color: white;
+  border-color: #d32f2f;
+}
+
+.attendance-note {
+  background-color: #f5f7f9;
+  padding: 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #666;
+  border-left: 4px solid #356575;
+  margin-top: 20px;
+}
+
+/* Training/Course Selector */
+.training-selector,
+.course-selector {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.training-selector label,
+.course-selector label {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #555;
+}
+
+.training-selector select,
+.course-selector select {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 250px;
+}
+
+.select-training-message,
+.select-course-message {
+  padding: 30px;
+  text-align: center;
+  background-color: #f5f7f9;
+  border-radius: 4px;
+  color: #666;
+}
+
+/* Section header */
+.section-header {
+  margin-bottom: 25px;
+}
+
+.section-header h2 {
+  color: #356575;
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.section-header p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
