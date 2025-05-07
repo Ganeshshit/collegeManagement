@@ -30,17 +30,11 @@ function AdminDashboard({ user, onLogout }) {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      // In a real app, you would use the API service
-      // const data = await getUsers();
-      
-      // Mock data for demonstration
-      const data = [
-        { id: 1, username: 'student', email: 'student@example.com', firstName: 'Student', lastName: 'User', role: 'student' },
-        { id: 2, username: 'faculty', email: 'faculty@example.com', firstName: 'Faculty', lastName: 'Member', role: 'faculty' },
-        { id: 3, username: 'trainer', email: 'trainer@example.com', firstName: 'Trainer', lastName: 'Expert', role: 'trainer' },
-        { id: 4, username: 'admin', email: 'admin@example.com', firstName: 'Admin', lastName: 'User', role: 'admin' },
-      ];
-      
+      // Use the real API service
+      console.log('Fetching users from API');
+      const data = await getUsers();
+      console.log('Fetched users:', data);
+
       setUsers(data);
       setError('');
     } catch (err) {
@@ -89,11 +83,12 @@ function AdminDashboard({ user, onLogout }) {
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        // In a real app, you would use the API service
-        // await deleteUser(userId);
-        
-        // Mock deletion
-        setUsers(users.filter(user => user.id !== userId));
+        // Use the real API service
+        console.log('Deleting user with ID:', userId);
+        await deleteUser(userId);
+
+        // Update the UI after successful deletion
+        setUsers(users.filter(user => user._id !== userId));
         setSuccess('User deleted successfully');
         setTimeout(() => setSuccess(''), 3000);
       } catch (err) {
@@ -105,43 +100,41 @@ function AdminDashboard({ user, onLogout }) {
 
   const handleSubmitUser = async (e) => {
     e.preventDefault();
-    
+
     // Validate form
     if (!formData.username || !formData.email || !formData.firstName || !formData.lastName || !formData.role) {
       setError('All fields are required');
       return;
     }
-    
+
     if (!editingUser && !formData.password) {
       setError('Password is required for new users');
       return;
     }
-    
+
     try {
       setLoading(true);
-      
+
       if (editingUser) {
-        // In a real app, you would use the API service
-        // await updateUser(editingUser.id, formData);
-        
-        // Mock update
-        setUsers(users.map(user => 
-          user.id === editingUser.id ? { ...user, ...formData } : user
+        // Use the real API service for updating
+        console.log('Updating user with ID:', editingUser._id, 'and data:', formData);
+        const updatedUser = await updateUser(editingUser._id, formData);
+
+        // Update the UI with the response from the API
+        setUsers(users.map(user =>
+          user._id === editingUser._id ? updatedUser : user
         ));
         setSuccess('User updated successfully');
       } else {
-        // In a real app, you would use the API service
-        // const response = await createUser(formData);
-        
-        // Mock creation
-        const newUser = {
-          id: users.length + 1,
-          ...formData
-        };
+        // Use the real API service for creating
+        console.log('Creating new user with data:', formData);
+        const newUser = await createUser(formData);
+
+        // Add the new user to the UI
         setUsers([...users, newUser]);
         setSuccess('User created successfully');
       }
-      
+
       setShowAddUserModal(false);
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
@@ -159,11 +152,43 @@ function AdminDashboard({ user, onLogout }) {
       <div className="dashboard-content">
         <nav className="dashboard-nav">
           <ul className="dashboard-nav-tabs">
+<<<<<<< HEAD
             <li 
               className="dashboard-nav-tab active"
             >
               User Management
             </li>
+=======
+            <li
+              className={`dashboard-nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              Overview
+            </li>
+            <li
+              className={`dashboard-nav-tab ${activeTab === 'users' ? 'active' : ''}`}
+              onClick={() => setActiveTab('users')}
+            >
+              User Management
+            </li>
+            <li
+              className={`dashboard-nav-tab ${activeTab === 'courses' ? 'active' : ''}`}
+              onClick={() => setActiveTab('courses')}
+            >
+              Course Management
+            </li>
+            <li
+              className={`dashboard-nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
+              onClick={() => setActiveTab('profile')}
+            >
+              Profile
+            </li>
+            <li className="dashboard-nav-tab">
+              <Link to="/reports" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Reports
+              </Link>
+            </li>
+>>>>>>> origin/main
           </ul>
         </nav>
 
@@ -172,13 +197,14 @@ function AdminDashboard({ user, onLogout }) {
             {error}
           </div>
         )}
-        
+
         {success && (
           <div className="alert alert-success" style={{ backgroundColor: '#d4edda', color: '#155724', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
             {success}
           </div>
         )}
 
+<<<<<<< HEAD
         <div className="table-container">
             <div className="table-header">
               <h2 className="table-title">User Management</h2>
@@ -188,6 +214,117 @@ function AdminDashboard({ user, onLogout }) {
                   placeholder="Search users..." 
                   className="form-control" 
                   style={{ width: '250px', marginRight: '16px', overflow: 'hidden' }}
+=======
+        {activeTab === 'overview' && (
+          <div>
+            <div className="dashboard-cards">
+              <div className="dashboard-card">
+                <div className="dashboard-card-header">
+                  <h3 className="dashboard-card-title">Total Users</h3>
+                  <div className="dashboard-card-icon">👥</div>
+                </div>
+                <div className="dashboard-card-value">{users.length}</div>
+                <div className="dashboard-card-description">All registered users in the system</div>
+              </div>
+
+              <div className="dashboard-card">
+                <div className="dashboard-card-header">
+                  <h3 className="dashboard-card-title">Students</h3>
+                  <div className="dashboard-card-icon">🎓</div>
+                </div>
+                <div className="dashboard-card-value">
+                  {users.filter(u => u.role === 'student').length}
+                </div>
+                <div className="dashboard-card-description">Registered students</div>
+              </div>
+
+              <div className="dashboard-card">
+                <div className="dashboard-card-header">
+                  <h3 className="dashboard-card-title">Faculty</h3>
+                  <div className="dashboard-card-icon">👨‍🏫</div>
+                </div>
+                <div className="dashboard-card-value">
+                  {users.filter(u => u.role === 'faculty').length}
+                </div>
+                <div className="dashboard-card-description">Faculty members</div>
+              </div>
+
+              <div className="dashboard-card">
+                <div className="dashboard-card-header">
+                  <h3 className="dashboard-card-title">Trainers</h3>
+                  <div className="dashboard-card-icon">👨‍💼</div>
+                </div>
+                <div className="dashboard-card-value">
+                  {users.filter(u => u.role === 'trainer').length}
+                </div>
+                <div className="dashboard-card-description">Training staff</div>
+              </div>
+            </div>
+
+            <div className="table-container">
+              <div className="table-header">
+                <h2 className="table-title">Recent Users</h2>
+                <div className="table-actions">
+                  <button className="btn btn-accent" onClick={handleAddUser}>Add New User</button>
+                </div>
+              </div>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.slice(0, 5).map(user => (
+                    <tr key={user._id}>
+                      <td>{user.username}</td>
+                      <td>{user.firstName} {user.lastName}</td>
+                      <td>{user.email}</td>
+                      <td>
+                        <span
+                          style={{
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            backgroundColor:
+                              user.role === 'admin' ? '#f44336' :
+                              user.role === 'faculty' ? '#2196f3' :
+                              user.role === 'trainer' ? '#ff9800' :
+                              '#4caf50',
+                            color: 'white',
+                            fontSize: '12px',
+                            textTransform: 'capitalize'
+                          }}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td>
+                        <button className="table-action-button" onClick={() => handleEditUser(user)}>Edit</button>
+                        <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user._id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'users' && (
+          <div className="table-container">
+            <div className="table-header">
+              <h2 className="table-title">User Management</h2>
+              <div className="table-actions">
+                <input
+                  type="text"
+                  placeholder="Search users..."
+                  className="form-control"
+                  style={{ width: '250px', marginRight: '16px' }}
+>>>>>>> origin/main
                 />
                 <button 
                   className="btn btn-accent" 
@@ -225,25 +362,171 @@ function AdminDashboard({ user, onLogout }) {
               </thead>
               <tbody>
                 {users.map(user => (
-                  <tr key={user.id}>
+                  <tr key={user._id}>
                     <td>{user.username}</td>
                     <td>{user.firstName} {user.lastName}</td>
                     <td>{user.email}</td>
                     <td>
+<<<<<<< HEAD
                       <span className={`role-badge ${user.role}`}>
+=======
+                      <span
+                        style={{
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          backgroundColor:
+                            user.role === 'admin' ? '#f44336' :
+                            user.role === 'faculty' ? '#2196f3' :
+                            user.role === 'trainer' ? '#ff9800' :
+                            '#4caf50',
+                          color: 'white',
+                          fontSize: '12px',
+                          textTransform: 'capitalize'
+                        }}
+                      >
+>>>>>>> origin/main
                         {user.role}
                       </span>
                     </td>
                     <td>
                       <button className="table-action-button" onClick={() => handleEditUser(user)}>Edit</button>
-                      <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                      <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user._id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+<<<<<<< HEAD
         </div>
+=======
+        )}
+
+        {activeTab === 'courses' && (
+          <div className="table-container">
+            <div className="table-header">
+              <h2 className="table-title">Course Management</h2>
+              <div className="table-actions">
+                <button className="btn btn-accent">Add New Course</button>
+              </div>
+            </div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Credits</th>
+                  <th>Instructor</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>CS101</td>
+                  <td>Introduction to Computer Science</td>
+                  <td>Computer Science</td>
+                  <td>3</td>
+                  <td>Dr. Smith</td>
+                  <td>
+                    <button className="table-action-button">Edit</button>
+                    <button className="table-action-button delete-button">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>CS201</td>
+                  <td>Data Structures</td>
+                  <td>Computer Science</td>
+                  <td>4</td>
+                  <td>Dr. Johnson</td>
+                  <td>
+                    <button className="table-action-button">Edit</button>
+                    <button className="table-action-button delete-button">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>CS301</td>
+                  <td>Database Systems</td>
+                  <td>Computer Science</td>
+                  <td>3</td>
+                  <td>Dr. Williams</td>
+                  <td>
+                    <button className="table-action-button">Edit</button>
+                    <button className="table-action-button delete-button">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {activeTab === 'profile' && (
+          <div className="form-container">
+            <h2 className="form-title">Admin Profile</h2>
+            <div className="form-row">
+              <div className="form-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.firstName}
+                  readOnly
+                />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.lastName}
+                  readOnly
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  value={user.email}
+                  readOnly
+                />
+              </div>
+              <div className="form-group">
+                <label>Username</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.username}
+                  readOnly
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Role</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.role}
+                  readOnly
+                />
+              </div>
+              <div className="form-group">
+                <label>Access Level</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={user.adminInfo?.accessLevel || 'Full'}
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+>>>>>>> origin/main
 
       
       {/* Add/Edit User Modal */}

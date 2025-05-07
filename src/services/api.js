@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+<<<<<<< HEAD
 // Set USE_MOCK_DATA to true to use mock data instead of real API
 const USE_MOCK_DATA = true;
 
@@ -17,8 +18,14 @@ const mockReports = [
   { id: 2, title: 'Performance Report', description: 'Student performance metrics', createdAt: '2025-04-15' }
 ];
 
+=======
+// Set USE_MOCK_DATA to false to use real API
+const USE_MOCK_DATA = false;
+const baseURL = process.env.REACT_APP_API_BASE_URL || 'https://collagemangementbackend.onrender.com/api';
+console.log('API Base URL:', baseURL); // Debug log to verify the URL
+>>>>>>> origin/main
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -182,7 +189,7 @@ export const getCurrentUser = async () => {
       console.log('No user found in mock data');
       return null;
     }
-    
+
     // If not in localStorage, get from API
     const response = await api.get('/auth/me');
     localStorage.setItem('user', JSON.stringify(response.data));
@@ -219,7 +226,7 @@ export const createUser = async (userData) => {
   try {
     console.log('Creating user with data:', userData);
     console.log('Auth token:', localStorage.getItem('token'));
-    
+
     // Make sure we're sending the request with the token
     const token = localStorage.getItem('token');
     const response = await api.post('/admin/users', userData, {
@@ -227,7 +234,7 @@ export const createUser = async (userData) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    
+
     console.log('Create user response:', response.data);
     if (response.data && response.data.user) {
       return response.data.user;
@@ -244,7 +251,7 @@ export const updateUser = async (id, userData) => {
   try {
     console.log('Updating user with data:', userData);
     console.log('Auth token:', localStorage.getItem('token'));
-    
+
     // Make sure we're sending the request with the token
     const token = localStorage.getItem('token');
     const response = await api.put(`/admin/users/${id}`, userData, {
@@ -252,7 +259,7 @@ export const updateUser = async (id, userData) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    
+
     console.log('Update user response:', response.data);
     if (response.data && response.data.user) {
       return response.data.user;
@@ -269,7 +276,7 @@ export const deleteUser = async (id) => {
   try {
     console.log('Deleting user with ID:', id);
     console.log('Auth token:', localStorage.getItem('token'));
-    
+
     // Make sure we're sending the request with the token
     const token = localStorage.getItem('token');
     const response = await api.delete(`/admin/users/${id}`, {
@@ -277,7 +284,7 @@ export const deleteUser = async (id) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    
+
     console.log('Delete user response:', response.data);
     return response.data;
   } catch (error) {
@@ -346,7 +353,7 @@ export const downloadReport = async (id) => {
     const response = await api.get(`/reports/${id}/download`, {
       responseType: 'blob'
     });
-    
+
     // Create a download link and trigger it
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
@@ -355,7 +362,7 @@ export const downloadReport = async (id) => {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    
+
     return true;
   } catch (error) {
     console.error('Download report error:', error);
