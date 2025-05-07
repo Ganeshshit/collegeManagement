@@ -9,6 +9,10 @@ import AdminDashboard from './components/AdminDashboard';
 import SuperAdminDashboard from './components/SuperAdminDashboard';
 import Reports from './components/Reports';
 import './App.css';
+import './styles/Layout.css';
+import './styles/Components.css';
+import './styles/DarkMode.css';
+import './styles/ProfileDarkMode.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -44,9 +48,10 @@ function App() {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading...</p>
+        <div className="loading-content">
+          <div className="spinner spinner-lg"></div>
+          <h2 className="loading-title">Faculty Management System</h2>
+          <p className="loading-text">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -56,18 +61,18 @@ function App() {
     <Router>
       <div className="app-container">
         <Routes>
-          <Route 
-            path="/login" 
-            element={user ? <Navigate to="/" /> : <Login onLogin={setUser} />} 
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/" /> : <Login onLogin={setUser} />}
           />
-          <Route 
-            path="/reports" 
+          <Route
+            path="/reports"
             element={
               user ? <Reports user={user} onLogout={handleLogout} /> : <Navigate to="/login" />
-            } 
+            }
           />
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               user ? (
                 (() => {
@@ -89,7 +94,7 @@ function App() {
               ) : (
                 <Navigate to="/login" />
               )
-            } 
+            }
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

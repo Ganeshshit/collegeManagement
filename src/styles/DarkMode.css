@@ -1,0 +1,397 @@
+/* Dark Mode Styles for UI Components */
+
+/* Card styles */
+.dark-mode .card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .card-header {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-mode .card-footer {
+  border-top-color: var(--border-color);
+}
+
+.dark-mode .card:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  border-color: var(--primary-dark);
+}
+
+/* Dashboard cards */
+.dark-mode .dashboard-card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .dashboard-card::before {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(59, 130, 246, 0.1) 100%);
+}
+
+.dark-mode .dashboard-card-title {
+  color: var(--primary-light);
+}
+
+.dark-mode .dashboard-card-value {
+  color: var(--text-light);
+}
+
+.dark-mode .dashboard-card-description {
+  color: var(--text-dark);
+}
+
+.dark-mode .dashboard-card-footer {
+  border-top-color: var(--border-color);
+  color: var(--text-dark);
+}
+
+/* Table styles */
+.dark-mode .table-container {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .table-header {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-mode .table-title {
+  color: var(--primary-light);
+}
+
+.dark-mode .table thead {
+  background-color: var(--background-dark);
+}
+
+.dark-mode .table th {
+  color: var(--primary-light);
+  border-bottom-color: var(--border-color);
+  background-color: var(--background-dark);
+}
+
+.dark-mode .table td {
+  border-bottom-color: var(--border-color);
+  color: var(--text-light);
+}
+
+.dark-mode .table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .table-action-button {
+  border-color: var(--border-color);
+  color: var(--text-light);
+}
+
+.dark-mode .table-action-button:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.dark-mode .delete-button {
+  color: var(--error-color);
+  border-color: var(--error-color);
+}
+
+.dark-mode .delete-button:hover {
+  background-color: var(--error-color);
+}
+
+/* Form styles */
+.dark-mode .form-control {
+  background-color: var(--input-bg);
+  border-color: var(--border-color);
+  color: var(--text-light);
+}
+
+.dark-mode .form-control:focus {
+  border-color: var(--primary-color);
+  background-color: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+.dark-mode .form-control::placeholder {
+  color: rgba(226, 232, 240, 0.5);
+}
+
+.dark-mode .form-label {
+  color: var(--text-light);
+}
+
+.dark-mode .form-text {
+  color: var(--text-dark);
+}
+
+/* Button styles */
+.dark-mode .btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+}
+
+.dark-mode .btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.dark-mode .btn-accent {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-dark));
+}
+
+.dark-mode .btn-accent:hover {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent-color));
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.4);
+}
+
+.dark-mode .btn-outline {
+  border-color: var(--primary-color);
+  color: var(--primary-light);
+}
+
+.dark-mode .btn-outline:hover {
+  background-color: rgba(96, 165, 250, 0.1);
+}
+
+/* Navigation styles */
+.dark-mode .nav-tabs {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-mode .nav-tab {
+  color: var(--text-dark);
+}
+
+.dark-mode .nav-tab:hover {
+  color: var(--primary-light);
+  background-color: rgba(96, 165, 250, 0.1);
+}
+
+.dark-mode .nav-tab.active {
+  color: var(--primary-light);
+  background-color: rgba(96, 165, 250, 0.15);
+}
+
+.dark-mode .nav-tab.active::after {
+  background: linear-gradient(to right, var(--accent-color), var(--accent-light));
+}
+
+/* Modal styles */
+.dark-mode .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode .modal {
+  background-color: var(--card-bg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-mode .modal-title {
+  color: var(--primary-light);
+}
+
+.dark-mode .modal-close {
+  color: var(--text-dark);
+}
+
+.dark-mode .modal-close:hover {
+  color: var(--error-color);
+}
+
+.dark-mode .modal-footer {
+  border-top-color: var(--border-color);
+}
+
+/* Alert styles */
+.dark-mode .alert-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: var(--success-color);
+  color: #34d399;
+}
+
+.dark-mode .alert-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--error-color);
+  color: #f87171;
+}
+
+.dark-mode .alert-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: var(--warning-color);
+  color: #fbbf24;
+}
+
+.dark-mode .alert-info {
+  background-color: rgba(14, 165, 233, 0.1);
+  border-color: var(--info-color);
+  color: #38bdf8;
+}
+
+/* Badge styles */
+.dark-mode .badge {
+  background-color: rgba(96, 165, 250, 0.2);
+}
+
+.dark-mode .badge-primary {
+  background-color: rgba(96, 165, 250, 0.2);
+  color: var(--primary-light);
+}
+
+.dark-mode .badge-accent {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: var(--accent-light);
+}
+
+.dark-mode .badge-success {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.dark-mode .badge-danger {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+/* Dropdown styles */
+.dark-mode .dropdown-menu {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .dropdown-item {
+  color: var(--text-light);
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: rgba(96, 165, 250, 0.1);
+  color: var(--primary-light);
+}
+
+.dark-mode .dropdown-divider {
+  border-top-color: var(--border-color);
+}
+
+/* Pagination styles */
+.dark-mode .pagination .page-link {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-light);
+}
+
+.dark-mode .pagination .page-link:hover {
+  background-color: rgba(96, 165, 250, 0.1);
+  color: var(--primary-light);
+}
+
+.dark-mode .pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.dark-mode .pagination .page-item.disabled .page-link {
+  background-color: rgba(15, 23, 42, 0.5);
+  color: rgba(226, 232, 240, 0.5);
+  border-color: var(--border-color);
+}
+
+/* Scrollbar styling */
+.dark-mode ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+  background: var(--background-dark);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Selection styling */
+.dark-mode ::selection {
+  background-color: var(--primary-dark);
+  color: white;
+}
+
+/* Focus styles for accessibility */
+.dark-mode *:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Performance badges */
+.dark-mode .performance-badge {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .performance-excellent {
+  background-color: rgba(74, 222, 128, 0.8);
+}
+
+.dark-mode .performance-good {
+  background-color: rgba(56, 189, 248, 0.8);
+}
+
+.dark-mode .performance-average {
+  background-color: rgba(251, 191, 36, 0.8);
+}
+
+.dark-mode .performance-poor {
+  background-color: rgba(248, 113, 113, 0.8);
+}
+
+/* Status badges */
+.dark-mode .status-badge {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .status-completed {
+  background-color: rgba(74, 222, 128, 0.8);
+}
+
+.dark-mode .status-pending {
+  background-color: rgba(251, 191, 36, 0.8);
+}
+
+/* No data message */
+.dark-mode .no-data-message {
+  color: #a0aec0;
+}
+
+/* Filter controls */
+.dark-mode .filter-select,
+.dark-mode .search-input {
+  background-color: var(--input-bg);
+  border-color: var(--border-color);
+  color: var(--text-light);
+}
+
+.dark-mode .filter-select:focus,
+.dark-mode .search-input:focus {
+  border-color: var(--primary-color);
+  background-color: rgba(15, 23, 42, 0.7);
+}
+
+/* Card action button */
+.dark-mode .card-action-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .card-action-button:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}

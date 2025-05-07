@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/api';
 import '../styles/Login.css';
-import mediniLogoTealText from '../assets/medini-logo-teal-text.svg';
+import fmsLogo from '../assets/fms-logo.svg';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -37,9 +37,9 @@ function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-card">
         <div className="login-logo">
-          <img src={mediniLogoTealText} alt="Medini School of Design" className="medini-logo-image" />
+          <img src={fmsLogo} alt="Faculty Management System" className="fms-logo-image" />
         </div>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -54,7 +54,7 @@ function Login({ onLogin }) {
               required
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -68,27 +68,47 @@ function Login({ onLogin }) {
               required
             />
           </div>
-          
+
           {error && <div className="error-message">{error}</div>}
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="login-button"
             disabled={loading}
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-        
+
         <div className="login-footer">
-          <p> 2025 Medini School of Design</p>
+          <p>© 2025 Faculty Management System</p>
           <div className="test-credentials">
-            <p><strong>Test Credentials:</strong></p>
-            <p>Student: student/student123</p>
-            <p>Faculty: faculty/faculty123</p>
-            <p>Trainer: trainer/trainer123</p>
-            <p>Admin: admin/admin123</p>
-            <p>SuperAdmin: superadmin/super123</p>
+            <div className="test-credentials-header">
+              <span className="test-icon">🔑</span>
+              <p><strong>Test Credentials</strong></p>
+            </div>
+            <div className="credentials-grid">
+              <div className="credential-item">
+                <span className="role-badge student">Student</span>
+                <span className="credential-text">student/student123</span>
+              </div>
+              <div className="credential-item">
+                <span className="role-badge faculty">Faculty</span>
+                <span className="credential-text">faculty/faculty123</span>
+              </div>
+              <div className="credential-item">
+                <span className="role-badge trainer">Trainer</span>
+                <span className="credential-text">trainer/trainer123</span>
+              </div>
+              <div className="credential-item">
+                <span className="role-badge admin">Admin</span>
+                <span className="credential-text">admin/admin123</span>
+              </div>
+              <div className="credential-item">
+                <span className="role-badge superadmin">SuperAdmin</span>
+                <span className="credential-text">superadmin/super123</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

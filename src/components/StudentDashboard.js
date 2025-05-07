@@ -76,7 +76,7 @@ function StudentDashboard({ user, onLogout }) {
     e.preventDefault();
     setLoading(true);
     setProfileError(null);
-    
+
     try {
       // Send profile data to the API
       await updateStudentProfile(user.id, profileData);
@@ -98,25 +98,25 @@ function StudentDashboard({ user, onLogout }) {
       <div className="dashboard-content">
         <nav className="dashboard-nav">
           <ul className="dashboard-nav-tabs">
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
               onClick={() => setActiveTab('overview')}
             >
               Overview
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'courses' ? 'active' : ''}`}
               onClick={() => setActiveTab('courses')}
             >
               My Courses
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'assignments' ? 'active' : ''}`}
               onClick={() => setActiveTab('assignments')}
             >
               Assignments
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
               onClick={() => setActiveTab('profile')}
             >
@@ -255,42 +255,33 @@ function StudentDashboard({ user, onLogout }) {
 
         {activeTab === 'profile' && (
           <div className="form-container">
-            <div className="form-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <div className="form-header">
               <h2 className="form-title">Student Profile</h2>
               {!isEditingProfile && (
-                <button 
-                  className="btn btn-primary" 
+                <button
+                  className="btn btn-primary"
                   onClick={() => setIsEditingProfile(true)}
-                  style={{ marginLeft: 'auto' }}
                 >
                   Edit Profile
                 </button>
               )}
             </div>
-            
+
             {profileSaved && (
-              <div className="alert alert-success" style={{ backgroundColor: '#d4edda', color: '#155724', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
+              <div className="alert alert-success">
                 Profile saved successfully!
               </div>
             )}
 
             {profileError && (
-              <div className="alert alert-danger" style={{ backgroundColor: '#f8d7da', color: '#721c24', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
+              <div className="alert alert-danger">
                 {profileError}
               </div>
             )}
 
             {loading ? (
-              <div className="loading-spinner" style={{ textAlign: 'center', padding: '40px' }}>
-                <div className="spinner" style={{ 
-                  border: '4px solid #f3f3f3',
-                  borderTop: '4px solid #3498db',
-                  borderRadius: '50%',
-                  width: '40px',
-                  height: '40px',
-                  animation: 'spin 2s linear infinite',
-                  margin: '0 auto'
-                }}></div>
+              <div className="loading-spinner">
+                <div className="spinner"></div>
                 <p>Loading profile data...</p>
               </div>
             ) : (
@@ -300,11 +291,11 @@ function StudentDashboard({ user, onLogout }) {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="firstName">First Name</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="firstName"
                         name="firstName"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.firstName}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -313,11 +304,11 @@ function StudentDashboard({ user, onLogout }) {
                     </div>
                     <div className="form-group">
                       <label htmlFor="lastName">Last Name</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="lastName"
                         name="lastName"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.lastName}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -328,11 +319,11 @@ function StudentDashboard({ user, onLogout }) {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="email">Email</label>
-                      <input 
-                        type="email" 
+                      <input
+                        type="email"
                         id="email"
                         name="email"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.email}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -341,11 +332,11 @@ function StudentDashboard({ user, onLogout }) {
                     </div>
                     <div className="form-group">
                       <label htmlFor="phone">Phone Number</label>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         id="phone"
                         name="phone"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.phone}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -360,11 +351,11 @@ function StudentDashboard({ user, onLogout }) {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="college">College</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="college"
                         name="college"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.college}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -373,11 +364,11 @@ function StudentDashboard({ user, onLogout }) {
                     </div>
                     <div className="form-group">
                       <label htmlFor="usn">USN (University Seat Number)</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="usn"
                         name="usn"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.usn}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -388,11 +379,11 @@ function StudentDashboard({ user, onLogout }) {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="course">Course</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="course"
                         name="course"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.course}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -401,11 +392,11 @@ function StudentDashboard({ user, onLogout }) {
                     </div>
                     <div className="form-group">
                       <label htmlFor="branch">Branch</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="branch"
                         name="branch"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.branch}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -416,10 +407,10 @@ function StudentDashboard({ user, onLogout }) {
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="year">Year</label>
-                      <select 
+                      <select
                         id="year"
                         name="year"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.year}
                         onChange={handleProfileChange}
                         disabled={!isEditingProfile}
@@ -434,11 +425,11 @@ function StudentDashboard({ user, onLogout }) {
                     </div>
                     <div className="form-group">
                       <label htmlFor="batchNo">Batch Number</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         id="batchNo"
                         name="batchNo"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.batchNo}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -451,12 +442,12 @@ function StudentDashboard({ user, onLogout }) {
                 <div className="form-section">
                   <h3 className="section-title">Additional Information</h3>
                   <div className="form-row">
-                    <div className="form-group" style={{ width: '100%' }}>
+                    <div className="form-group full-width">
                       <label htmlFor="about">About Me</label>
-                      <textarea 
+                      <textarea
                         id="about"
                         name="about"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.about}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -465,12 +456,12 @@ function StudentDashboard({ user, onLogout }) {
                     </div>
                   </div>
                   <div className="form-row">
-                    <div className="form-group" style={{ width: '100%' }}>
+                    <div className="form-group full-width">
                       <label htmlFor="certifications">Certifications</label>
-                      <textarea 
+                      <textarea
                         id="certifications"
                         name="certifications"
-                        className="form-control" 
+                        className="form-control"
                         value={profileData.certifications}
                         onChange={handleProfileChange}
                         readOnly={!isEditingProfile}
@@ -482,19 +473,18 @@ function StudentDashboard({ user, onLogout }) {
                 </div>
 
                 {isEditingProfile && (
-                  <div className="form-actions" style={{ marginTop: '20px' }}>
-                    <button 
-                      type="submit" 
-                      className="btn btn-accent" 
+                  <div className="form-actions">
+                    <button
+                      type="submit"
+                      className="btn btn-accent"
                       disabled={loading}
                     >
                       {loading ? 'Saving...' : 'Save Profile'}
                     </button>
-                    <button 
-                      type="button" 
-                      className="btn btn-secondary" 
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
                       onClick={() => setIsEditingProfile(false)}
-                      style={{ marginLeft: '10px' }}
                       disabled={loading}
                     >
                       Cancel

@@ -40,7 +40,7 @@ function FacultyDashboard({ user, onLogout }) {
   }, []);
 
   const filteredStudents = students.filter(student => {
-    const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          student.rollNumber.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCourse = selectedCourse === 'all' || student.course === selectedCourse;
     return matchesSearch && matchesCourse;
@@ -53,31 +53,31 @@ function FacultyDashboard({ user, onLogout }) {
       <div className="dashboard-content">
         <nav className="dashboard-nav">
           <ul className="dashboard-nav-tabs">
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
               onClick={() => setActiveTab('overview')}
             >
               Overview
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'courses' ? 'active' : ''}`}
               onClick={() => setActiveTab('courses')}
             >
               My Courses
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'students' ? 'active' : ''}`}
               onClick={() => setActiveTab('students')}
             >
               Students
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'reports' ? 'active' : ''}`}
               onClick={() => setActiveTab('reports')}
             >
               Reports
             </li>
-            <li 
+            <li
               className={`dashboard-nav-tab ${activeTab === 'profile' ? 'active' : ''}`}
               onClick={() => setActiveTab('profile')}
             >
@@ -206,9 +206,8 @@ function FacultyDashboard({ user, onLogout }) {
             <div className="table-header">
               <h2 className="table-title">Students</h2>
               <div className="table-actions">
-                <select 
-                  className="form-control" 
-                  style={{ width: '150px', marginRight: '10px' }}
+                <select
+                  className="form-control form-control-sm filter-select"
                   value={selectedCourse}
                   onChange={(e) => setSelectedCourse(e.target.value)}
                 >
@@ -217,11 +216,10 @@ function FacultyDashboard({ user, onLogout }) {
                     <option key={course.id} value={course.code}>{course.code}</option>
                   ))}
                 </select>
-                <input 
-                  type="text" 
-                  placeholder="Search students..." 
-                  className="form-control" 
-                  style={{ width: '250px' }}
+                <input
+                  type="text"
+                  placeholder="Search students..."
+                  className="form-control form-control-sm search-input"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -246,17 +244,8 @@ function FacultyDashboard({ user, onLogout }) {
                     <td>{student.course}</td>
                     <td>{student.attendance}</td>
                     <td>
-                      <span 
-                        style={{ 
-                          padding: '4px 8px', 
-                          borderRadius: '4px', 
-                          backgroundColor: 
-                            student.performance === 'Excellent' ? '#4caf50' : 
-                            student.performance === 'Good' ? '#2196f3' : 
-                            student.performance === 'Average' ? '#ff9800' : '#f44336',
-                          color: 'white',
-                          fontSize: '12px'
-                        }}
+                      <span
+                        className={`performance-badge performance-${student.performance.toLowerCase()}`}
                       >
                         {student.performance}
                       </span>
@@ -269,9 +258,9 @@ function FacultyDashboard({ user, onLogout }) {
                 ))}
               </tbody>
             </table>
-            
+
             {filteredStudents.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+              <div className="no-data-message">
                 No students found matching your search criteria.
               </div>
             )}
@@ -288,7 +277,7 @@ function FacultyDashboard({ user, onLogout }) {
                 </div>
                 <div className="dashboard-card-value">2</div>
                 <div className="dashboard-card-description">View attendance reports</div>
-                <button className="btn btn-sm" style={{ marginTop: '10px' }}>View Reports</button>
+                <button className="btn btn-sm btn-primary card-action-button">View Reports</button>
               </div>
 
               <div className="dashboard-card">
@@ -298,7 +287,7 @@ function FacultyDashboard({ user, onLogout }) {
                 </div>
                 <div className="dashboard-card-value">1</div>
                 <div className="dashboard-card-description">View performance reports</div>
-                <button className="btn btn-sm" style={{ marginTop: '10px' }}>View Reports</button>
+                <button className="btn btn-sm btn-primary card-action-button">View Reports</button>
               </div>
 
               <div className="dashboard-card">
@@ -308,7 +297,7 @@ function FacultyDashboard({ user, onLogout }) {
                 </div>
                 <div className="dashboard-card-value">1</div>
                 <div className="dashboard-card-description">View exam results</div>
-                <button className="btn btn-sm" style={{ marginTop: '10px' }}>View Reports</button>
+                <button className="btn btn-sm btn-primary card-action-button">View Reports</button>
               </div>
             </div>
 
@@ -316,7 +305,7 @@ function FacultyDashboard({ user, onLogout }) {
               <div className="table-header">
                 <h2 className="table-title">Available Reports</h2>
                 <div className="table-actions">
-                  <select className="form-control" style={{ width: '150px' }}>
+                  <select className="form-control form-control-sm filter-select">
                     <option value="all">All Reports</option>
                     <option value="attendance">Attendance</option>
                     <option value="performance">Performance</option>
@@ -341,14 +330,8 @@ function FacultyDashboard({ user, onLogout }) {
                       <td>{report.course}</td>
                       <td>{new Date(report.date).toLocaleDateString()}</td>
                       <td>
-                        <span 
-                          style={{ 
-                            padding: '4px 8px', 
-                            borderRadius: '4px', 
-                            backgroundColor: report.status === 'Completed' ? '#4caf50' : '#ff9800',
-                            color: 'white',
-                            fontSize: '12px'
-                          }}
+                        <span
+                          className={`status-badge status-${report.status.toLowerCase()}`}
                         >
                           {report.status}
                         </span>
@@ -367,85 +350,95 @@ function FacultyDashboard({ user, onLogout }) {
 
         {activeTab === 'profile' && (
           <div className="form-container">
-            <h2 className="form-title">Faculty Profile</h2>
-            <div className="form-row">
-              <div className="form-group">
-                <label>First Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.firstName} 
-                  readOnly 
-                />
+            <div className="form-header">
+              <h2 className="form-title">Faculty Profile</h2>
+            </div>
+
+            <div className="form-section">
+              <h3 className="section-title">Personal Information</h3>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.firstName}
+                    readOnly
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.lastName}
+                    readOnly
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.lastName} 
-                  readOnly 
-                />
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={user.email}
+                    readOnly
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Username</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.username}
+                    readOnly
+                  />
+                </div>
               </div>
             </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Email</label>
-                <input 
-                  type="email" 
-                  className="form-control" 
-                  value={user.email} 
-                  readOnly 
-                />
+
+            <div className="form-section">
+              <h3 className="section-title">Professional Information</h3>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Employee ID</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.facultyInfo?.employeeId || 'FAC001'}
+                    readOnly
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Department</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.facultyInfo?.department || 'Computer Science'}
+                    readOnly
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label>Username</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.username} 
-                  readOnly 
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Employee ID</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.facultyInfo?.employeeId || 'FAC001'} 
-                  readOnly 
-                />
-              </div>
-              <div className="form-group">
-                <label>Department</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.facultyInfo?.department || 'Computer Science'} 
-                  readOnly 
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Designation</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.facultyInfo?.designation || 'Professor'} 
-                  readOnly 
-                />
-              </div>
-              <div className="form-group">
-                <label>Specialization</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.facultyInfo?.specialization || 'Artificial Intelligence'} 
-                  readOnly 
-                />
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Designation</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.facultyInfo?.designation || 'Professor'}
+                    readOnly
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Specialization</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={user.facultyInfo?.specialization || 'Artificial Intelligence'}
+                    readOnly
+                  />
+                </div>
               </div>
             </div>
           </div>

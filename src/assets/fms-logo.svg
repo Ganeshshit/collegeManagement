@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
+  <defs>
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3a7bd5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00d2ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF8C42;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA66B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <g>
+    <!-- Graduation Cap -->
+    <path d="M 250,50 L 150,90 L 250,130 L 350,90 Z" fill="url(#primaryGradient)" />
+    <path d="M 180,100 L 180,140 C 180,150 210,160 250,160 C 290,160 320,150 320,140 L 320,100" stroke="url(#primaryGradient)" stroke-width="10" fill="none" />
+    <circle cx="320" cy="120" r="10" fill="url(#accentGradient)" />
+    
+    <!-- Text -->
+    <text x="130" y="190" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#3a7bd5">FACULTY MANAGEMENT SYSTEM</text>
+  </g>
+</svg>
