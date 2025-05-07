@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import AttendanceSystem from './AttendanceSystem';
 import '../App.css';
 
 function FacultyDashboard({ user, onLogout }) {
@@ -11,6 +12,7 @@ function FacultyDashboard({ user, onLogout }) {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('all');
+  const [selectedCourseForAttendance, setSelectedCourseForAttendance] = useState(null);
 
   useEffect(() => {
     // Mock data - in a real app, you would fetch this from your API
@@ -63,13 +65,19 @@ function FacultyDashboard({ user, onLogout }) {
               className={`dashboard-nav-tab ${activeTab === 'courses' ? 'active' : ''}`}
               onClick={() => setActiveTab('courses')}
             >
-              My Courses
+              List of Courses
             </li>
             <li 
               className={`dashboard-nav-tab ${activeTab === 'students' ? 'active' : ''}`}
               onClick={() => setActiveTab('students')}
             >
               Students
+            </li>
+            <li 
+              className={`dashboard-nav-tab ${activeTab === 'attendance' ? 'active' : ''}`}
+              onClick={() => setActiveTab('attendance')}
+            >
+              Attendance
             </li>
             <li 
               className={`dashboard-nav-tab ${activeTab === 'reports' ? 'active' : ''}`}
@@ -91,7 +99,7 @@ function FacultyDashboard({ user, onLogout }) {
             <div className="dashboard-cards">
               <div className="dashboard-card">
                 <div className="dashboard-card-header">
-                  <h3 className="dashboard-card-title">My Courses</h3>
+                  <h3 className="dashboard-card-title">List of Courses</h3>
                   <div className="dashboard-card-icon">📚</div>
                 </div>
                 <div className="dashboard-card-value">{courses.length}</div>
@@ -167,7 +175,7 @@ function FacultyDashboard({ user, onLogout }) {
         {activeTab === 'courses' && (
           <div className="table-container">
             <div className="table-header">
-              <h2 className="table-title">My Courses</h2>
+              <h2 className="table-title">List of Courses</h2>
               <div className="table-actions">
                 <button className="btn btn-accent">Add New Course</button>
               </div>
@@ -273,6 +281,46 @@ function FacultyDashboard({ user, onLogout }) {
             {filteredStudents.length === 0 && (
               <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
                 No students found matching your search criteria.
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'attendance' && (
+          <div className="attendance-container">
+            <div className="section-header">
+              <h2>View Attendance Records</h2>
+              <p>You can view attendance records for students in your courses. Only trainers can modify attendance.</p>
+            </div>
+            
+            <div className="course-selector">
+              <label htmlFor="courseSelect">Select Course: </label>
+              <select 
+                id="courseSelect" 
+                value={selectedCourseForAttendance ? selectedCourseForAttendance.id : ''}
+                onChange={(e) => {
+                  const selected = courses.find(c => c.id === parseInt(e.target.value));
+                  setSelectedCourseForAttendance(selected);
+                }}
+              >
+                <option value="">-- Select a Course --</option>
+                {courses.map(course => (
+                  <option key={course.id} value={course.id}>
+                    {course.code}: {course.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {selectedCourseForAttendance ? (
+              <AttendanceSystem 
+                userRole="faculty" 
+                courseId={selectedCourseForAttendance.id} 
+                students={students.filter(s => s.course === selectedCourseForAttendance.code)}
+              />
+            ) : (
+              <div className="select-course-message">
+                <p>Please select a course to view attendance records.</p>
               </div>
             )}
           </div>

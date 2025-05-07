@@ -5,6 +5,8 @@ import Header from './Header';
 import '../App.css';
 
 function AdminDashboard({ user, onLogout }) {
+  console.log('AdminDashboard rendered with user:', user);
+  
   const [activeTab, setActiveTab] = useState('overview');
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -150,6 +152,13 @@ function AdminDashboard({ user, onLogout }) {
       <div className="dashboard-content">
         <nav className="dashboard-nav">
           <ul className="dashboard-nav-tabs">
+<<<<<<< HEAD
+            <li 
+              className="dashboard-nav-tab active"
+            >
+              User Management
+            </li>
+=======
             <li
               className={`dashboard-nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
               onClick={() => setActiveTab('overview')}
@@ -179,6 +188,7 @@ function AdminDashboard({ user, onLogout }) {
                 Reports
               </Link>
             </li>
+>>>>>>> origin/main
           </ul>
         </nav>
 
@@ -194,6 +204,17 @@ function AdminDashboard({ user, onLogout }) {
           </div>
         )}
 
+<<<<<<< HEAD
+        <div className="table-container">
+            <div className="table-header">
+              <h2 className="table-title">User Management</h2>
+              <div className="table-actions">
+                <input 
+                  type="text" 
+                  placeholder="Search users..." 
+                  className="form-control" 
+                  style={{ width: '250px', marginRight: '16px', overflow: 'hidden' }}
+=======
         {activeTab === 'overview' && (
           <div>
             <div className="dashboard-cards">
@@ -303,8 +324,30 @@ function AdminDashboard({ user, onLogout }) {
                   placeholder="Search users..."
                   className="form-control"
                   style={{ width: '250px', marginRight: '16px' }}
+>>>>>>> origin/main
                 />
-                <button className="btn btn-accent" onClick={handleAddUser}>Add New User</button>
+                <button 
+                  className="btn btn-accent" 
+                  onClick={handleAddUser}
+                  style={{
+                    padding: '10px 18px',
+                    backgroundColor: '#6366f1',
+                    color: 'white',
+                    border: '2px solid #4f46e5',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 2px 4px rgba(99, 102, 241, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span style={{ fontSize: '18px' }}>+</span> Add New User
+                </button>
               </div>
             </div>
             <table className="table">
@@ -324,6 +367,9 @@ function AdminDashboard({ user, onLogout }) {
                     <td>{user.firstName} {user.lastName}</td>
                     <td>{user.email}</td>
                     <td>
+<<<<<<< HEAD
+                      <span className={`role-badge ${user.role}`}>
+=======
                       <span
                         style={{
                           padding: '4px 8px',
@@ -338,6 +384,7 @@ function AdminDashboard({ user, onLogout }) {
                           textTransform: 'capitalize'
                         }}
                       >
+>>>>>>> origin/main
                         {user.role}
                       </span>
                     </td>
@@ -350,6 +397,9 @@ function AdminDashboard({ user, onLogout }) {
               </tbody>
             </table>
           </div>
+<<<<<<< HEAD
+        </div>
+=======
         )}
 
         {activeTab === 'courses' && (
@@ -476,104 +526,214 @@ function AdminDashboard({ user, onLogout }) {
           </div>
         )}
       </div>
+>>>>>>> origin/main
 
+      
       {/* Add/Edit User Modal */}
       {showAddUserModal && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <div className="modal-header">
-              <h2 className="modal-title">{editingUser ? 'Edit User' : 'Add New User'}</h2>
-              <button className="modal-close" onClick={() => setShowAddUserModal(false)}>&times;</button>
+        <div className="modal-backdrop" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="modal" style={{ position: 'relative', margin: 'auto', width: '400px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)' }}>
+            <div className="modal-header" style={{ padding: '15px 20px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>
+              <h2 className="modal-title" style={{ margin: 0, fontSize: '18px', fontWeight: '500' }}>{editingUser ? 'Edit User' : 'Add New User'}</h2>
+              <button 
+                style={{ background: 'none', border: 'none', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', color: '#666' }} 
+                onClick={() => setShowAddUserModal(false)}
+              >
+                ×
+              </button>
             </div>
             <form onSubmit={handleSubmitUser}>
-              <div className="modal-body">
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input
-                      type="text"
-                      id="username"
-                      name="username"
-                      className="form-control"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="form-control"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+              <div className="modal-body" style={{ padding: '20px' }}>
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="username" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    className="form-control"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      className="form-control"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      className="form-control"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
+                
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="password" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    className="form-control"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    required={!editingUser}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Minimum 6 characters</div>
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="role">Role</label>
-                    <select
-                      id="role"
-                      name="role"
-                      className="form-control"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="student">Student</option>
-                      <option value="faculty">Faculty</option>
-                      <option value="trainer">Trainer</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="password">Password {editingUser && '(Leave blank to keep current)'}</label>
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      className="form-control"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      required={!editingUser}
-                    />
-                  </div>
+                
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="form-control"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="firstName" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>First Name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    className="form-control"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="lastName" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    className="form-control"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="role" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Role</label>
+                  <select
+                    id="role"
+                    name="role"
+                    className="form-control"
+                    value={formData.role}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      appearance: 'none',
+                      backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23333\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right 10px center',
+                      backgroundSize: '16px'
+                    }}
+                  >
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="trainer">Trainer</option>
+                    <option value="admin">Admin</option>
+                  </select>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowAddUserModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-accent" disabled={loading}>
-                  {loading ? 'Saving...' : (editingUser ? 'Update User' : 'Add User')}
+              
+              <div className="modal-footer" style={{
+                padding: '15px 20px',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                borderTop: '1px solid #eee',
+                gap: '10px'
+              }}>
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setShowAddUserModal(false)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    backgroundColor: '#f8f9fa',
+                    color: '#333',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn btn-accent" 
+                  disabled={loading}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    backgroundColor: '#6366f1',
+                    color: 'white',
+                    fontSize: '14px',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.7 : 1,
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {loading ? 'Saving...' : 'Create'}
                 </button>
               </div>
             </form>

@@ -188,7 +188,28 @@ function SuperAdminDashboard({ user, onLogout }) {
           <div className="table-header">
             <h2 className="table-title">User Management</h2>
             <div className="table-actions">
-              <button className="btn btn-accent" onClick={handleAddAdmin}>Add New User</button>
+              <button 
+                className="btn btn-accent" 
+                onClick={handleAddAdmin}
+                style={{
+                  padding: '10px 18px',
+                  backgroundColor: '#6366f1',
+                  color: 'white',
+                  border: '2px solid #4f46e5',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 4px rgba(99, 102, 241, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              >
+                <span style={{ fontSize: '18px' }}>+</span> Add New User
+              </button>
             </div>
           </div>
           {loading ? (
@@ -265,20 +286,21 @@ function SuperAdminDashboard({ user, onLogout }) {
 
       {/* Add/Edit Admin Modal */}
       {showAddAdminModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h2>{editingAdmin ? 'Edit User' : 'Add New User'}</h2>
+        <div className="modal-backdrop" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1000 }}>
+          <div className="modal" style={{ position: 'relative', margin: 'auto', width: '400px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', backgroundColor: 'white', maxHeight: '90vh', overflow: 'hidden' }}>
+            <div className="modal-header" style={{ padding: '15px 20px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>
+              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '500' }}>{editingAdmin ? 'Edit User' : 'Add New User'}</h2>
               <button 
-                className="modal-close" 
+                style={{ background: 'none', border: 'none', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', color: '#666' }} 
                 onClick={() => setShowAddAdminModal(false)}
               >
-                &times;
+                ×
               </button>
             </div>
             <form onSubmit={handleSubmitAdmin}>
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
+              <div className="modal-body" style={{ padding: '20px' }}>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="username" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Username</label>
                 <input
                   type="text"
                   id="username"
@@ -286,12 +308,22 @@ function SuperAdminDashboard({ user, onLogout }) {
                   value={formData.username}
                   onChange={handleInputChange}
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </div>
               
               {!editingAdmin && (
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label htmlFor="password" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Password</label>
                   <input
                     type="password"
                     id="password"
@@ -299,13 +331,23 @@ function SuperAdminDashboard({ user, onLogout }) {
                     value={formData.password}
                     onChange={handleInputChange}
                     required={!editingAdmin}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      border: '1px solid #ddd',
+                      backgroundColor: '#f8f9fa',
+                      fontSize: '14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
                   />
-                  <small>Minimum 6 characters</small>
+                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Minimum 6 characters</div>
                 </div>
               )}
               
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Email</label>
                 <input
                   type="email"
                   id="email"
@@ -313,43 +355,86 @@ function SuperAdminDashboard({ user, onLogout }) {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
                 />
               </div>
               
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="firstName" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
               </div>
               
-              <div className="form-group">
-                <label htmlFor="role">Role</label>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="lastName" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Last Name</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+              
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="role" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Role</label>
                 <select
                   id="role"
                   name="role"
                   value={formData.role}
                   onChange={handleInputChange}
                   required
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    border: '1px solid #ddd',
+                    backgroundColor: '#f8f9fa',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    appearance: 'none',
+                    backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23333\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 10px center',
+                    backgroundSize: '16px'
+                  }}
                 >
                   <option value="admin">Admin</option>
                   <option value="faculty">Faculty</option>
@@ -358,18 +443,46 @@ function SuperAdminDashboard({ user, onLogout }) {
                 </select>
               </div>
               
-              <div className="form-actions">
+              </div>
+              <div className="modal-footer" style={{
+                padding: '15px 20px',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                borderTop: '1px solid #eee',
+                gap: '10px'
+              }}>
                 <button 
                   type="button" 
-                  className="btn btn-secondary"
+                  className="btn btn-secondary" 
                   onClick={() => setShowAddAdminModal(false)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    backgroundColor: '#f8f9fa',
+                    color: '#333',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className="btn btn-accent"
+                  className="btn btn-accent" 
                   disabled={loading}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    backgroundColor: '#6366f1',
+                    color: 'white',
+                    fontSize: '14px',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.7 : 1,
+                    transition: 'all 0.2s'
+                  }}
                 >
                   {loading ? 'Saving...' : (editingAdmin ? 'Update' : 'Create')}
                 </button>

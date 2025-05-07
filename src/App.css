@@ -6,10 +6,33 @@
   --accent-color: #ff8c42;
   --accent-light: #ffa66b;
   --accent-dark: #e67223;
+  --action-color: #6c5ce7;
+  --action-light: #8a7ef5;
+  --action-dark: #5348c0;
+  --success-color: #4CAF50;
+  --danger-color: #f44336;
+  --warning-color: #ff9800;
+  --info-color: #2196f3;
   --text-light: #ffffff;
   --text-dark: #333333;
+  --text-muted: #6c757d;
   --background-light: #f5f7f8;
   --background-dark: #e1e5e8;
+  --border-color: #e0e0e0;
+  --input-bg: #f9f9f9;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --transition-fast: 0.2s;
+  --transition-normal: 0.3s;
 }
 
 .app-container {
@@ -212,29 +235,30 @@
 /* Table Styles */
 .table-container {
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: var(--spacing-lg);
 }
 
 .table-header {
-  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table-title {
   margin: 0;
-  color: var(--primary-color);
   font-size: 18px;
+  font-weight: 500;
+  color: var(--primary-dark);
 }
 
 .table-actions {
   display: flex;
-  gap: 8px;
+  align-items: center;
 }
 
 .table {
@@ -244,51 +268,90 @@
 
 .table th,
 .table td {
-  padding: 16px 24px;
+  padding: var(--spacing-md) var(--spacing-lg);
   text-align: left;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .table th {
-  background-color: var(--primary-color);
-  color: white;
   font-weight: 500;
+  color: var(--text-muted);
+  background-color: var(--input-bg);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.table tr {
-  border-bottom: 1px solid #eee;
+.table tr:hover {
+  background-color: rgba(53, 101, 117, 0.03);
 }
 
-.table tr:last-child {
+.table tr:last-child td {
   border-bottom: none;
 }
 
-.table tr:nth-child(even) {
-  background-color: var(--background-light);
-}
-
 .table-action-button {
-  background: none;
+  background-color: transparent;
   border: none;
-  cursor: pointer;
   color: var(--primary-color);
-  transition: color 0.3s;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-right: 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-size: 14px;
 }
 
 .table-action-button:hover {
-  color: var(--accent-color);
+  background-color: rgba(53, 101, 117, 0.1);
+  transform: translateY(-1px);
 }
 
-.delete-button {
-  color: #d32f2f;
+.table-action-button.delete-button {
+  color: var(--danger-color);
 }
 
-.delete-button:hover {
-  color: #b71c1c;
+.table-action-button.delete-button:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Role badges */
+.role-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.role-badge.admin {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.role-badge.faculty {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: var(--info-color);
+}
+
+.role-badge.trainer {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.role-badge.student {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
 }
 
 /* Form Styles */
 .form-container {
   background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 24px;
@@ -327,6 +390,39 @@
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.3s;
+  overflow: hidden;
+}
+
+/* Global scrollbar removal */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remove scrollbars from all input elements */
+input, textarea, select {
+  overflow: hidden !important;
+}
+
+/* Remove scrollbars from modal content */
+.modal, .modal-body, .modal-content, .modal-backdrop, .modal-header, .modal-footer {
+  overflow: hidden !important;
+}
+
+/* Remove scrollbars from form groups */
+.form-group {
+  overflow: hidden !important;
+}
+
+/* Ensure modal content is properly visible */
+.modal-body {
+  max-height: 70vh;
+  padding: 16px;
 }
 
 .form-control:focus {
@@ -401,7 +497,10 @@
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  animation: modalFadeIn 0.3s ease-out;
 }
 
 .modal-header {
@@ -477,5 +576,27 @@
   
   .btn {
     width: 100%;
+  }
+}
+
+/* Modal Animation Styles */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal backdrop animation */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
