@@ -12,10 +12,24 @@ function Login({ onLogin }) {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    // Prevent default form submission
     e.preventDefault();
-    console.log('Form submitted with:', { username, password });
-    
-    if (!username || !password) {
+
+    // Validate input length
+    if (username.length < 3) {
+      setError('Username must be at least 3 characters long');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedUsername || !trimmedPassword) {
       setError('Please enter both username and password');
       return;
     }
@@ -23,27 +37,30 @@ function Login({ onLogin }) {
     try {
       setLoading(true);
       setError('');
-      
-      // Simple login attempt with exact credentials
-      console.log('Attempting login with credentials:', { username, password });
-      const response = await login({ username, password });
-      
+      const response = await login(trimmedUsername, trimmedPassword);
       if (!response) {
         throw new Error('No response from login service');
       }
-      
       console.log('Login response:', response);
-      
-      // Update the user state in App.js
       onLogin(response.user);
-      
-      // Navigate to root first (which will handle redirection based on role)
-      console.log('Navigating to root, which will redirect based on role');
       navigate('/');
-      
     } catch (err) {
-      setError('Invalid credentials. Please try again.');
-      console.error('Login error:', err);
+      console.error('Full login error:', err);
+      
+      if (err.response) {
+        console.error('Response error details:', {
+          status: err.response.status,
+          data: err.response.data,
+          headers: err.response.headers
+        });
+        setError(err.response.data.message || 'Login failed. Please check your credentials.');
+      } else if (err.request) {
+        console.error('Request error:', err.request);
+        setError('No response from server. Please check your network connection.');
+      } else {
+        console.error('Unexpected error:', err.message);
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

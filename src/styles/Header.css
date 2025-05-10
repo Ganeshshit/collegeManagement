@@ -68,7 +68,43 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-right: 20px;
+  padding: 0 10px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-icon-container {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease;
+  margin-right: 16px;
+}
+
+.settings-icon-container:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.settings-icon {
+  color: white;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.settings-icon-container:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.settings-icon-container:hover .settings-icon {
+  transform: rotate(90deg);
 }
 
 .dashboard-user-info {

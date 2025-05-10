@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import '../styles/Header.css';
 import mediniLogo from '../assets/client-1.png';
 
@@ -29,15 +30,31 @@ function Header({ title, user, onLogout }) {
         <h1 className="dashboard-title">{title}</h1>
       </div>
       <div className="header-right">
+        <motion.div 
+          className="settings-icon-container"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          title="Dashboard Settings"
+        >
+          <i className="fas fa-cog settings-icon"></i>
+        </motion.div>
         {user && (
           <div className="dashboard-user-info">
-            <div className="user-avatar">
-              <i className="user-icon"></i>
-            </div>
             <span className="dashboard-username">
-              Welcome, {user.firstName} {user.lastName}
+              Welcome, {user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'User'}
             </span>
-            <button className="logout-button" onClick={onLogout}>
+            <button 
+              className="logout-button" 
+              onClick={(e) => {
+                e.preventDefault();
+                try {
+                  onLogout();
+                } catch (error) {
+                  console.error('Logout failed:', error);
+                  alert('An error occurred during logout. Please try again.');
+                }
+              }}
+            >
               <i className="logout-icon"></i>
               <span>Logout</span>
             </button>

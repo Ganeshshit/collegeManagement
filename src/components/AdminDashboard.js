@@ -1,464 +1,620 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getUsers, createUser, updateUser, deleteUser } from '../services/api';
-import Header from './Header';
-import '../App.css';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../services/api';
+import '../styles/global.css';
+import '../styles/Navigation.css';
 
-function AdminDashboard({ user, onLogout }) {
-  console.log('AdminDashboard rendered with user:', user);
-  
+const AdminDashboard = ({ user, onLogout }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [editingUser, setEditingUser] = useState(null);
+  const [students, setStudents] = useState([]);
+  const [faculty, setFaculty] = useState([]);
+  const [trainers, setTrainers] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('student');
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    email: '',
     firstName: '',
     lastName: '',
-    role: 'student'
+    email: '',
+    phone: '',
+    role: 'student',
+    department: '',
+    specialization: ''
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
+  // Fetch data on component mount
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+    fetchData();
+  }, [navigate]);
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
     try {
-      setLoading(true);
-      // In a real app, you would use the API service
-      // const data = await getUsers();
-      
-      // Mock data for demonstration
-      const data = [
-        { id: 1, username: 'student', email: 'student@example.com', firstName: 'Student', lastName: 'User', role: 'student' },
-        { id: 2, username: 'faculty', email: 'faculty@example.com', firstName: 'Faculty', lastName: 'Member', role: 'faculty' },
-        { id: 3, username: 'trainer', email: 'trainer@example.com', firstName: 'Trainer', lastName: 'Expert', role: 'trainer' },
-        { id: 4, username: 'admin', email: 'admin@example.com', firstName: 'Admin', lastName: 'User', role: 'admin' },
-      ];
-      
-      setUsers(data);
-      setError('');
-    } catch (err) {
-      setError('Failed to fetch users');
-      console.error('Error fetching users:', err);
-    } finally {
-      setLoading(false);
+      const studentsResponse = await fetch('http://localhost:5000/api/students');
+      const studentsData = await studentsResponse.json();
+      setStudents(studentsData);
+
+      const facultyResponse = await fetch('http://localhost:5000/api/faculty');
+      const facultyData = await facultyResponse.json();
+      setFaculty(facultyData);
+
+      const trainersResponse = await fetch('http://localhost:5000/api/trainers');
+      const trainersData = await trainersResponse.json();
+      setTrainers(trainersData);
+
+      const coursesResponse = await fetch('http://localhost:5000/api/courses');
+      const coursesData = await coursesResponse.json();
+      setCourses(coursesData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleAddUser = () => {
-    setFormData({
-      username: '',
-      password: '',
-      email: '',
-      firstName: '',
-      lastName: '',
-      role: 'student'
-    });
-    setEditingUser(null);
-    setShowAddUserModal(true);
-  };
-
-  const handleEditUser = (user) => {
-    setFormData({
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-      // Don't set password for editing
-      password: ''
-    });
-    setEditingUser(user);
-    setShowAddUserModal(true);
-  };
-
-  const handleDeleteUser = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
-        // In a real app, you would use the API service
-        // await deleteUser(userId);
-        
-        // Mock deletion
-        setUsers(users.filter(user => user.id !== userId));
-        setSuccess('User deleted successfully');
-        setTimeout(() => setSuccess(''), 3000);
-      } catch (err) {
-        setError('Failed to delete user');
-        console.error('Error deleting user:', err);
-      }
+  const handleLogout = () => {
+    try {
+      logout(); // Clear storage in api service
+      onLogout(); // Update app state
+      navigate('/login', { replace: true }); // Redirect to login
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   };
 
-  const handleSubmitUser = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate form
-    if (!formData.username || !formData.email || !formData.firstName || !formData.lastName || !formData.role) {
-      setError('All fields are required');
-      return;
-    }
-    
-    if (!editingUser && !formData.password) {
-      setError('Password is required for new users');
-      return;
-    }
-    
+    const userData = {
+      ...(editMode ? { id: editId } : { id: Date.now() }),
+      ...formData
+    };
+
     try {
-      setLoading(true);
-      
-      if (editingUser) {
-        // In a real app, you would use the API service
-        // await updateUser(editingUser.id, formData);
-        
-        // Mock update
-        setUsers(users.map(user => 
-          user.id === editingUser.id ? { ...user, ...formData } : user
-        ));
-        setSuccess('User updated successfully');
-      } else {
-        // In a real app, you would use the API service
-        // const response = await createUser(formData);
-        
-        // Mock creation
-        const newUser = {
-          id: users.length + 1,
-          ...formData
-        };
-        setUsers([...users, newUser]);
-        setSuccess('User created successfully');
+      const url = `http://localhost:5000/api/${selectedRole}s${editMode ? `/${editId}` : ''}`;
+      const method = editMode ? 'PUT' : 'POST';
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+
+      if (!response.ok) throw new Error('Failed to save user');
+
+      // Update state based on role
+      if (selectedRole === 'student') {
+        if (editMode) {
+          setStudents(students.map(s => s.id === editId ? userData : s));
+        } else {
+          setStudents([...students, userData]);
+        }
+      } else if (selectedRole === 'faculty') {
+        if (editMode) {
+          setFaculty(faculty.map(f => f.id === editId ? userData : f));
+        } else {
+          setFaculty([...faculty, userData]);
+        }
+      } else if (selectedRole === 'trainer') {
+        if (editMode) {
+          setTrainers(trainers.map(t => t.id === editId ? userData : t));
+        } else {
+          setTrainers([...trainers, userData]);
+        }
       }
-      
-      setShowAddUserModal(false);
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError(editingUser ? 'Failed to update user' : 'Failed to create user');
-      console.error('Error saving user:', err);
-    } finally {
-      setLoading(false);
+
+      setShowAddModal(false);
+      setEditMode(false);
+      setEditId(null);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        role: 'student',
+        department: '',
+        specialization: ''
+      });
+    } catch (error) {
+      console.error('Error saving user:', error);
+    }
+  };
+
+  const handleEdit = (item, type) => {
+    setEditMode(true);
+    setEditId(item.id);
+    setSelectedRole(type.slice(0, -1)); // Remove 's' from end
+    setFormData({
+      firstName: item.firstName,
+      lastName: item.lastName,
+      email: item.email,
+      phone: item.phone,
+      role: type.slice(0, -1),
+      department: item.department || '',
+      specialization: item.specialization || ''
+    });
+    setShowAddModal(true);
+  };
+
+  const handleDelete = async (id, type) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/${type}/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) throw new Error('Failed to delete');
+
+      // Update state based on type
+      if (type === 'students') {
+        setStudents(students.filter(s => s.id !== id));
+      } else if (type === 'faculty') {
+        setFaculty(faculty.filter(f => f.id !== id));
+      } else if (type === 'trainers') {
+        setTrainers(trainers.filter(t => t.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting:', error);
     }
   };
 
   return (
-    <div className="dashboard-container">
-      <Header title="Admin Dashboard" user={user} onLogout={onLogout} />
+    <div className="admin-dashboard">
+      <div className="dashboard-header">
+        <nav className="nav-tabs">
+          <div 
+            className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveTab('overview')}
+          >
+            Overview
+          </div>
+          <div 
+            className={`nav-tab ${activeTab === 'students' ? 'active' : ''}`}
+            onClick={() => setActiveTab('students')}
+          >
+            Students
+          </div>
+          <div 
+            className={`nav-tab ${activeTab === 'faculty' ? 'active' : ''}`}
+            onClick={() => setActiveTab('faculty')}
+          >
+            Faculty
+          </div>
+          <div 
+            className={`nav-tab ${activeTab === 'trainers' ? 'active' : ''}`}
+            onClick={() => setActiveTab('trainers')}
+          >
+            Trainers
+          </div>
+          <div 
+            className={`nav-tab ${activeTab === 'courses' ? 'active' : ''}`}
+            onClick={() => setActiveTab('courses')}
+          >
+            Courses
+          </div>
+          <button 
+            className="logout-btn" 
+            onClick={handleLogout}
+            title="Click to logout"
+          >
+            Logout
+          </button>
+        </nav>
+      </div>
 
       <div className="dashboard-content">
-        <nav className="dashboard-nav">
-          <ul className="dashboard-nav-tabs">
-            <li 
-              className="dashboard-nav-tab active"
-            >
-              User Management
-            </li>
-          </ul>
-        </nav>
-
-        {error && (
-          <div className="alert alert-error" style={{ backgroundColor: '#f8d7da', color: '#721c24', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
-            {error}
-          </div>
-        )}
-        
-        {success && (
-          <div className="alert alert-success" style={{ backgroundColor: '#d4edda', color: '#155724', padding: '12px', borderRadius: '4px', marginBottom: '16px' }}>
-            {success}
-          </div>
-        )}
-
-        <div className="table-container">
-            <div className="table-header">
-              <h2 className="table-title">User Management</h2>
-              <div className="table-actions">
-                <input 
-                  type="text" 
-                  placeholder="Search users..." 
-                  className="form-control" 
-                  style={{ width: '250px', marginRight: '16px', overflow: 'hidden' }}
-                />
-                <button 
-                  className="btn btn-accent" 
-                  onClick={handleAddUser}
-                  style={{
-                    padding: '10px 18px',
-                    backgroundColor: '#6366f1',
-                    color: 'white',
-                    border: '2px solid #4f46e5',
-                    borderRadius: '6px',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 2px 4px rgba(99, 102, 241, 0.3)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px'
-                  }}
-                >
-                  <span style={{ fontSize: '18px' }}>+</span> Add New User
-                </button>
+        {activeTab === 'overview' && (
+          <div className="overview-section">
+            <div className="overview-grid">
+              <div className="overview-card">
+                <div className="overview-card-header">
+                  <h3>Total Students</h3>
+                  <span className="count">{students.length}</span>
+                </div>
+              </div>
+              <div className="overview-card">
+                <div className="overview-card-header">
+                  <h3>Total Faculty</h3>
+                  <span className="count">{faculty.length}</span>
+                </div>
+              </div>
+              <div className="overview-card">
+                <div className="overview-card-header">
+                  <h3>Total Trainers</h3>
+                  <span className="count">{trainers.length}</span>
+                </div>
+              </div>
+              <div className="overview-card">
+                <div className="overview-card-header">
+                  <h3>Total Courses</h3>
+                  <span className="count">{courses.length}</span>
+                </div>
               </div>
             </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map(user => (
-                  <tr key={user.id}>
-                    <td>{user.username}</td>
-                    <td>{user.firstName} {user.lastName}</td>
-                    <td>{user.email}</td>
-                    <td>
-                      <span className={`role-badge ${user.role}`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td>
-                      <button className="table-action-button" onClick={() => handleEditUser(user)}>Edit</button>
-                      <button className="table-action-button delete-button" onClick={() => handleDeleteUser(user.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
-        </div>
+        )}
 
-      
-      {/* Add/Edit User Modal */}
-      {showAddUserModal && (
-        <div className="modal-backdrop" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="modal" style={{ position: 'relative', margin: 'auto', width: '400px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)' }}>
-            <div className="modal-header" style={{ padding: '15px 20px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>
-              <h2 className="modal-title" style={{ margin: 0, fontSize: '18px', fontWeight: '500' }}>{editingUser ? 'Edit User' : 'Add New User'}</h2>
-              <button 
-                style={{ background: 'none', border: 'none', fontSize: '20px', fontWeight: 'bold', cursor: 'pointer', color: '#666' }} 
-                onClick={() => setShowAddUserModal(false)}
+        {activeTab === 'students' && (
+          <div className="user-management-section">
+            <div className="section-header">
+              <h2>Students</h2>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setSelectedRole('student');
+                  setShowAddModal(true);
+                }}
+              >
+                Add Student
+              </button>
+            </div>
+            <div className="table-container">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {students.map((student) => (
+                    <tr key={student.id}>
+                      <td>{student.firstName} {student.lastName}</td>
+                      <td>{student.email}</td>
+                      <td>{student.phone}</td>
+                      <td>{student.department}</td>
+                      <td>
+                        <button 
+                          className="btn btn-secondary btn-sm" 
+                          onClick={() => handleEdit(student, 'students')}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn btn-danger btn-sm" 
+                          style={{marginLeft: '0.5rem'}}
+                          onClick={() => handleDelete(student.id, 'students')}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'faculty' && (
+          <div className="user-management-section">
+            <div className="section-header">
+              <h2>Faculty</h2>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setSelectedRole('faculty');
+                  setShowAddModal(true);
+                }}
+              >
+                Add Faculty
+              </button>
+            </div>
+            <div className="table-container">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {faculty.map((member) => (
+                    <tr key={member.id}>
+                      <td>{member.firstName} {member.lastName}</td>
+                      <td>{member.email}</td>
+                      <td>{member.phone}</td>
+                      <td>{member.department}</td>
+                      <td>
+                        <button 
+                          className="btn btn-secondary btn-sm" 
+                          onClick={() => handleEdit(member, 'faculty')}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn btn-danger btn-sm" 
+                          style={{marginLeft: '0.5rem'}}
+                          onClick={() => handleDelete(member.id, 'faculty')}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'trainers' && (
+          <div className="user-management-section">
+            <div className="section-header">
+              <h2>Trainers</h2>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setSelectedRole('trainer');
+                  setShowAddModal(true);
+                }}
+              >
+                Add Trainer
+              </button>
+            </div>
+            <div className="table-container">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Specialization</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {trainers.map((trainer) => (
+                    <tr key={trainer.id}>
+                      <td>{trainer.firstName} {trainer.lastName}</td>
+                      <td>{trainer.email}</td>
+                      <td>{trainer.phone}</td>
+                      <td>{trainer.specialization}</td>
+                      <td>
+                        <button 
+                          className="btn btn-secondary btn-sm" 
+                          onClick={() => handleEdit(trainer, 'trainers')}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn btn-danger btn-sm" 
+                          style={{marginLeft: '0.5rem'}}
+                          onClick={() => handleDelete(trainer.id, 'trainers')}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'courses' && (
+          <div className="user-management-section">
+            <div className="section-header">
+              <h2>Course Management</h2>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setSelectedRole('course');
+                  setShowAddModal(true);
+                }}
+              >
+                Add Course
+              </button>
+            </div>
+            <div className="table-container">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Course Name</th>
+                    <th>Department</th>
+                    <th>Duration</th>
+                    <th>Instructor</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {courses.map((course) => (
+                    <tr key={course.id}>
+                      <td>{course.name}</td>
+                      <td>{course.department}</td>
+                      <td>{course.duration}</td>
+                      <td>{course.instructor}</td>
+                      <td>
+                        <button 
+                          className="btn btn-secondary btn-sm" 
+                          onClick={() => handleEdit(course, 'courses')}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn btn-danger btn-sm" 
+                          style={{marginLeft: '0.5rem'}}
+                          onClick={() => handleDelete(course.id, 'courses')}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {showAddModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setShowAddModal(false);
+                  setEditMode(false);
+                  setEditId(null);
+                  setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    role: 'student',
+                    department: '',
+                    specialization: ''
+                  });
+                }}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '10px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '20px',
+                  cursor: 'pointer'
+                }}
               >
                 ×
               </button>
-            </div>
-            <form onSubmit={handleSubmitUser}>
-              <div className="modal-body" style={{ padding: '20px' }}>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                  <label htmlFor="username" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Username</label>
+              <form onSubmit={handleSubmit}>
+                <h2>{editMode ? `Edit ${selectedRole}` : `Add New ${selectedRole}`}</h2>
+                <div className="form-group">
                   <input
                     type="text"
-                    id="username"
-                    name="username"
-                    className="form-control"
-                    value={formData.username}
-                    onChange={handleInputChange}
+                    placeholder="First Name"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                     required
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      border: '1px solid #ddd',
-                      backgroundColor: '#f8f9fa',
-                      fontSize: '14px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
                   />
                 </div>
-                
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                  <label htmlFor="password" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Password</label>
+                <div className="form-group">
                   <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="form-control"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required={!editingUser}
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      border: '1px solid #ddd',
-                      backgroundColor: '#f8f9fa',
-                      fontSize: '14px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
+                    type="text"
+                    placeholder="Last Name"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                    required
                   />
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Minimum 6 characters</div>
                 </div>
-                
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                  <label htmlFor="email" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Email</label>
+                <div className="form-group">
                   <input
                     type="email"
-                    id="email"
-                    name="email"
-                    className="form-control"
+                    placeholder="Email"
                     value={formData.email}
-                    onChange={handleInputChange}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
                     required
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      border: '1px solid #ddd',
-                      backgroundColor: '#f8f9fa',
-                      fontSize: '14px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
                   />
                 </div>
-                
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                  <label htmlFor="firstName" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>First Name</label>
+                <div className="form-group">
                   <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    className="form-control"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
+                    type="tel"
+                    placeholder="Phone"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     required
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      border: '1px solid #ddd',
-                      backgroundColor: '#f8f9fa',
-                      fontSize: '14px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
                   />
                 </div>
-                
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                  <label htmlFor="lastName" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Last Name</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    className="form-control"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      border: '1px solid #ddd',
-                      backgroundColor: '#f8f9fa',
-                      fontSize: '14px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                  />
+                {selectedRole !== 'course' && (
+                  <div className="form-group">
+                    <select
+                      value={formData.department}
+                      onChange={(e) => setFormData({...formData, department: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '8px',
+                        marginBottom: '10px',
+                        border: '1px solid #ddd'
+                      }}
+                    >
+                      <option value="">Select Department</option>
+                      <option value="Computer Science">Computer Science</option>
+                      <option value="Information Technology">Information Technology</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Mechanical">Mechanical</option>
+                      <option value="Civil">Civil</option>
+                    </select>
+                  </div>
+                )}
+                {selectedRole === 'trainer' && (
+                  <div className="form-group">
+                    <select
+                      value={formData.specialization}
+                      onChange={(e) => setFormData({...formData, specialization: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '8px',
+                        marginBottom: '10px',
+                        border: '1px solid #ddd'
+                      }}
+                    >
+                      <option value="">Select Specialization</option>
+                      <option value="Machine Learning">Machine Learning</option>
+                      <option value="Web Development">Web Development</option>
+                      <option value="Cloud Computing">Cloud Computing</option>
+                      <option value="Mobile Development">Mobile Development</option>
+                      <option value="Data Science">Data Science</option>
+                      <option value="Cybersecurity">Cybersecurity</option>
+                    </select>
+                  </div>
+                )}
+                <div className="modal-actions">
+                  <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary"
+                      onClick={() => {
+                        setShowAddModal(false);
+                        setEditMode(false);
+                        setEditId(null);
+                        setFormData({
+                          firstName: '',
+                          lastName: '',
+                          email: '',
+                          phone: '',
+                          role: 'student',
+                          department: '',
+                          specialization: ''
+                        });
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '4px'
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '4px'
+                      }}
+                    >
+                      {editMode ? 'Update' : 'Save'}
+                    </button>
+                  </div>
                 </div>
-                
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                  <label htmlFor="role" style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Role</label>
-                  <select
-                    id="role"
-                    name="role"
-                    className="form-control"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      border: '1px solid #ddd',
-                      backgroundColor: '#f8f9fa',
-                      fontSize: '14px',
-                      outline: 'none',
-                      boxSizing: 'border-box',
-                      appearance: 'none',
-                      backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23333\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 10px center',
-                      backgroundSize: '16px'
-                    }}
-                  >
-                    <option value="student">Student</option>
-                    <option value="faculty">Faculty</option>
-                    <option value="trainer">Trainer</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="modal-footer" style={{
-                padding: '15px 20px',
-                display: 'flex',
-                justifyContent: 'flex-end',
-                borderTop: '1px solid #eee',
-                gap: '10px'
-              }}>
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
-                  onClick={() => setShowAddUserModal(false)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    border: 'none',
-                    backgroundColor: '#f8f9fa',
-                    color: '#333',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-accent" 
-                  disabled={loading}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    border: 'none',
-                    backgroundColor: '#6366f1',
-                    color: 'white',
-                    fontSize: '14px',
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    opacity: loading ? 0.7 : 1,
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  {loading ? 'Saving...' : 'Create'}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default AdminDashboard;

@@ -1,4 +1,16 @@
 /* Main App Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 :root {
   --primary-color: #356575;
   --primary-light: #4a7f90;

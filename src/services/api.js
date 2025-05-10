@@ -113,13 +113,13 @@ api.interceptors.response.use(
 );
 
 // Auth API functions
-export const login = async (credentials) => {
+export const login = async (username, password) => {
   try {
-    console.log('Attempting login with:', credentials);
+    console.log('Attempting login with:', { username });
     
     if (USE_MOCK_DATA) {
       // Mock login logic
-      const { username, password } = credentials;
+      // Credentials passed separately
       
       console.log('Checking credentials against mock users...');
       
@@ -168,7 +168,7 @@ export const login = async (credentials) => {
     }
     
     // Real API call if not using mock data
-    const response = await api.post('/auth/login', credentials);
+    const response = await api.post('/auth/login', { username, password });
     console.log('Login response:', response.data);
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
@@ -184,7 +184,8 @@ export const login = async (credentials) => {
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = '/login';
+  sessionStorage.clear();
+  return true;
 };
 
 export const getCurrentUser = async () => {

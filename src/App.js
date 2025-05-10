@@ -5,10 +5,10 @@ import Login from './components/Login';
 import StudentDashboard from './components/StudentDashboard';
 import FacultyDashboard from './components/FacultyDashboard';
 import TrainerDashboard from './components/TrainerDashboard';
-import AdminDashboard from './components/AdminDashboard';
+import AdminDashboard from './components/AdminDashboard.js';
 import SuperAdminDashboard from './components/SuperAdminDashboard';
 import Reports from './components/Reports';
-import './App.css';
+import './styles/global.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -58,10 +58,12 @@ function App() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Loading...</p>
+      <div className="dashboard-layout">
+        <div className="dashboard-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="spinner"></div>
+            <p>Loading...</p>
+          </div>
         </div>
       </div>
     );
@@ -69,7 +71,7 @@ function App() {
 
   return (
     <Router>
-      <div className="app-container">
+      <div>
         <Routes>
           <Route 
             path="/login" 

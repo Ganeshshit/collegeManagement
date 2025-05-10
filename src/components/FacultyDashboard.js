@@ -89,46 +89,76 @@ function FacultyDashboard({ user, onLogout }) {
         {activeTab === 'overview' && (
           <div>
             <div className="dashboard-cards">
-              <div className="dashboard-card">
+              <div className="dashboard-card quick-stats">
                 <div className="dashboard-card-header">
-                  <h3 className="dashboard-card-title">List of Courses</h3>
+                  <h3 className="dashboard-card-title">Academic Snapshot</h3>
                   <div className="dashboard-card-icon">📚</div>
                 </div>
-                <div className="dashboard-card-value">{courses.length}</div>
-                <div className="dashboard-card-description">Total courses you are teaching</div>
+                <div className="dashboard-card-content">
+                  <div className="stat-item">
+                    <span className="stat-label">Courses</span>
+                    <span className="stat-value">{courses.length}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Active Courses</span>
+                    <span className="stat-value">{courses.filter(course => course.status === 'active').length}</span>
+                  </div>
+                </div>
+                <div className="dashboard-card-description">Quick overview of your teaching load</div>
               </div>
 
-              <div className="dashboard-card">
+              <div className="dashboard-card student-metrics">
                 <div className="dashboard-card-header">
-                  <h3 className="dashboard-card-title">Students</h3>
-                  <div className="dashboard-card-icon">👨‍🎓</div>
+                  <h3 className="dashboard-card-title">Student Analytics</h3>
+                  <div className="dashboard-card-icon">👥</div>
                 </div>
-                <div className="dashboard-card-value">
-                  {students.length}
+                <div className="dashboard-card-content">
+                  <div className="stat-item">
+                    <span className="stat-label">Total Students</span>
+                    <span className="stat-value">{students.length}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Enrolled Students</span>
+                    <span className="stat-value">{students.filter(student => student.course).length}</span>
+                  </div>
                 </div>
-                <div className="dashboard-card-description">Students under your courses</div>
+                <div className="dashboard-card-description">Student enrollment at a glance</div>
               </div>
 
-              <div className="dashboard-card">
+              <div className="dashboard-card schedule-preview">
                 <div className="dashboard-card-header">
-                  <h3 className="dashboard-card-title">Upcoming Classes</h3>
+                  <h3 className="dashboard-card-title">Today's Schedule</h3>
                   <div className="dashboard-card-icon">🗓️</div>
                 </div>
-                <div className="dashboard-card-value">
-                  2
+                <div className="dashboard-card-content">
+                  <div className="stat-item">
+                    <span className="stat-label">Scheduled Classes</span>
+                    <span className="stat-value">2</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Next Class</span>
+                    <span className="stat-value">CS101 - 10:00 AM</span>
+                  </div>
                 </div>
-                <div className="dashboard-card-description">Classes scheduled for today</div>
+                <div className="dashboard-card-description">Your teaching schedule summary</div>
               </div>
 
-              <div className="dashboard-card">
+              <div className="dashboard-card reporting">
                 <div className="dashboard-card-header">
-                  <h3 className="dashboard-card-title">Reports</h3>
+                  <h3 className="dashboard-card-title">Performance Tracking</h3>
                   <div className="dashboard-card-icon">📊</div>
                 </div>
-                <div className="dashboard-card-value">
-                  {reports.length}
+                <div className="dashboard-card-content">
+                  <div className="stat-item">
+                    <span className="stat-label">Total Reports</span>
+                    <span className="stat-value">{reports.length}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Recent Reports</span>
+                    <span className="stat-value">{reports.filter(report => report.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length}</span>
+                  </div>
                 </div>
-                <div className="dashboard-card-description">Available reports</div>
+                <div className="dashboard-card-description">Insights from recent assessments</div>
               </div>
             </div>
 
